@@ -8,11 +8,15 @@ import Explore from "./pages/explore";
 import Chat from "./pages/chat";
 import RightPanel from "./components/rightPanel";
 import PostPage from "./pages/postPage";
+import { MessageCircle } from "lucide-react";
+import FloatingButtons from "./components/floatingButtons";
+import AiMiniChat from "./components/aiMiniChat";
+import ChatMini from "./components/chatMini";
 
 function App() {
   return (
-    <div className="bg-black">
-      <div className="flex h-screen max-w-fit mx-auto  overflow-hidden">
+    <div className="bg-black relative">
+      <div className="flex h-screen max-w-fit mx-35  overflow-hidden">
         <SideBar />
 
         {/* Main Content Area */}
@@ -34,6 +38,10 @@ function App() {
           <RightPanel />
         </div>
       </div>
+
+
+      <FloatingButtons />
+      
     </div>
   );
 }
