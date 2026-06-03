@@ -18,39 +18,6 @@ const FloatingButtons = () => {
     setIsAiChatExpanded(false);
   };
 
-  const panelVariants = {
-    hidden: {
-      opacity: 0,
-      scale: 0.85,
-      y: 30,
-    },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.85,
-      y: 30,
-    },
-  };
-
-  const panelVariants2 = {
-    hidden: {
-      // opacity: 0,
-      height: 0,
-    },
-    visible: {
-      // opacity: 1,
-      height: 70,
-    },
-    exit: {
-      // opacity: 0,
-      height: 70,
-    },
-  };
-
   return (
     <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50 w-fit items-end">
       <motion.div
@@ -83,7 +50,7 @@ const FloatingButtons = () => {
             {/* Grok Icon (spark + arrow feel) */}
             <Sparkles size={18} />
 
-            {/* small arrow accent (premium touch) */}
+            {/* small arrow accent */}
             <ArrowUpRight
               size={10}
               className="absolute bottom-3 right-3 text-white/40"
