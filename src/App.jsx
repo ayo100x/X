@@ -16,13 +16,13 @@ import ChatMini from "./components/chatMini";
 function App() {
   return (
     <div className="bg-black relative">
-      <div className="flex h-screen max-w-fit mx-35  overflow-hidden">
+      <div className="flex h-screen max-w-fit mx-auto  overflow-hidden">
         <SideBar />
 
         {/* Main Content Area */}
         <div className="flex flex-1 min-w-0">
           {/* Page */}
-          <div className="w-ful w-[600px]  text-white border-r border-white/10">
+          <div className="w-150  text-white border-r border-white/10">
             <Routes >
               <Route path="/" element={<Home />} />
               <Route path="/profile" element={<Profile />} />

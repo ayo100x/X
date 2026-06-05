@@ -16,7 +16,7 @@ const PostCard = ({ post }) => {
   ];
 
   return (
-    <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/[0.02] transition">
+    <div className="w-full max-w-2xl b g-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition">
       {/* Header */}
       <div className="ml-7 mb-1 text-white/40 flex items-center gap-2">
         <Repeat2 className="size-5" /> You reposted
@@ -40,7 +40,7 @@ const PostCard = ({ post }) => {
           </div>
 
           {/* Post Content */}
-          <div className="mt-2">
+          <div className="mt-2 mr-9">
             <p className="text-[15px] leading-6 text-white/90">
               Building a social media app from scratch with React, Tailwind,
               Zustand and Express. The goal is to keep the UI extremely clean,

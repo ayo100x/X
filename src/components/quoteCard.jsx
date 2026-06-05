@@ -38,13 +38,12 @@ const QuoteCard = () => {
           </div>
 
           {/* Post Content */}
-          <div className="mt-2">
+          <div className="m-3">
             <p className="text-[15px] leading-6 text-white/90">
               Building a social media app from scratch with React, Tailwind,
               Zustand and Express. The goal is to keep the UI extremely clean,
               minimal and premium while maintaining excellent performance.
             </p>
-
             <MediaGrid media={media} />
           </div>
         </div>
