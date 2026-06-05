@@ -26,7 +26,7 @@ const PostDetailsCard = () => {
   ];
 
   return (
-    <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border border-white/10">
+    <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10">
       {/* HEADER */}
       <div className="flex items-start justify-between">
         <div className="flex gap-3">
