@@ -2,6 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import PostCard from "../components/postCard";
 import { Link } from "react-router-dom";
 import PostDetailsCard from "../components/postDetailsCard";
+import ThreadView from "../components/threadView";
 
 const PostPage = () => {
   return (
@@ -11,7 +12,8 @@ const PostPage = () => {
         <span>Post</span>
       </div>
       <div className="overflow-y-auto hide-scrollbar ">
-        <PostDetailsCard />
+        {/* <PostDetailsCard /> */}
+        <ThreadView />
       </div>
     </div>
   );
