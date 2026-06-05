@@ -12,8 +12,8 @@ const PostPage = () => {
         <span>Post</span>
       </div>
       <div className="overflow-y-auto hide-scrollbar ">
-        {/* <PostDetailsCard /> */}
-        <ThreadView />
+        <PostDetailsCard />
+        {/* <ThreadView /> */}
       </div>
     </div>
   );

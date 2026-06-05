@@ -110,7 +110,7 @@ const PostDetailsCard = () => {
             <ChevronDown size={14} />
           </button>
 
-          <button className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition">
+          <button className="flex items-center gap-1 text-sm text-white/60 hover:text-white transition">
             <span>View Quotes</span>
             <ChevronRight size={14} />
           </button>
