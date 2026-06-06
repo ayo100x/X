@@ -10,47 +10,47 @@ import MediaGrid from "./mediaGrid";
 import QuoteCard from "./quoteCard";
 
 const PostCard = ({ post }) => {
-  const media = [
-    "https://picsum.photos/800/500",
-    "https://picsum.photos/600/600",
-  ];
-
   return (
     <div className="w-full max-w-2xl b g-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition">
       {/* Header */}
-      <div className="ml-7 mb-1 text-white/40 flex items-center gap-2">
-        <Repeat2 className="size-5" /> You reposted
-      </div>
+      {post.repost.length > 0 && (
+        <div className="ml-7 mb-1 text-white/40 flex items-center gap-2">
+          <Repeat2 className="size-5" /> You reposted
+        </div>
+      )}
+
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="h-11 w-11 shrink-0 rounded-full bg-white/10 flex items-center justify-center font-medium">
-          A
+        <div className="h-11 w-11 rounded-full bg-white/10 flex items-center justify-center font-medium">
+          <img
+            src={post.user.userIcon}
+            alt=""
+            className="w-full h-full object-cover rounded-full"
+          />
         </div>
 
         <div className="flex-1 min-w-0">
           {/* User Info */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="font-semibold text-white">Ayomide</span>
+            <span className="font-semibold text-white">{post.user.name}</span>
 
-            <span className="text-white/40">@ayomide</span>
+            <span className="text-white/40">@{post.user.userName}</span>
 
             <span className="text-white/30">•</span>
 
-            <span className="text-white/40">2h</span>
+            <span className="text-white/40">{post.createdAt}</span>
           </div>
 
           {/* Post Content */}
           <div className="mt-2 mr-9">
             <p className="text-[15px] leading-6 text-white/90">
-              Building a social media app from scratch with React, Tailwind,
-              Zustand and Express. The goal is to keep the UI extremely clean,
-              minimal and premium while maintaining excellent performance.
+              {post.postText}
             </p>
 
-            <MediaGrid media={media} />
+            <MediaGrid media={post.postMedia} />
           </div>
 
-          {post.quote && (
+          {post.quoteId && (
             <div>
               <QuoteCard />
             </div>
@@ -65,17 +65,17 @@ const PostCard = ({ post }) => {
 
             <button className="flex items-center gap-2 hover:text-white transition-colors">
               <Repeat2 size={18} />
-              <span className="text-sm">12</span>
+              <span className="text-sm">{post.repost.length}</span>
             </button>
 
             <button className="flex items-center gap-2 hover:text-white transition-colors">
               <Heart size={18} />
-              <span className="text-sm">145</span>
+              <span className="text-sm">{post.likes}</span>
             </button>
 
             <button className="flex items-center gap-2 hover:text-white transition-colors">
               <BarChart2 size={18} />
-              <span className="text-sm">4.2K</span>
+              <span className="text-sm">{post.views}</span>
             </button>
 
             {/* Actions */}
