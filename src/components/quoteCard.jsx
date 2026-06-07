@@ -7,15 +7,22 @@ import {
   Upload,
 } from "lucide-react";
 import MediaGrid from "./mediaGrid";
+import { formatPostTime } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
-const QuoteCard = () => {
-  const media = [
-    "https://picsum.photos/800/500",
-    "https://picsum.photos/600/600",
-  ];
+const QuoteCard = ({ post }) => {
+  if (!post) return null;
+
+  const navigate = useNavigate()
+  const handleOnClick = (e) => {
+    e.stopPropagation();
+    navigate(`/post/${post.postId}`)
+  }
 
   return (
-    <div className="w-full max-w-2xl bg-black text-white   ">
+    <div 
+    onClick={handleOnClick}
+    className="w-full max-w-2xl cursor-pointer bg-black text-white   ">
       {/* Header */}
 
       <div className="flex gap-3 border rounded-xl  border-white/10 mt-10 p-2">
@@ -26,25 +33,27 @@ const QuoteCard = () => {
 
           <div className="flex items-center gap-2 text-sm">
             <div className="size-10 shrink-0 rounded-full bg-white/10 flex items-center justify-center font-medium">
-              A
+              <img
+                src={post.user.userIcon}
+                alt=""
+                className="w-full h-full object-cover rounded-full"
+              />
             </div>
-            <span className="font-semibold text-white">Ayomide</span>
+            <span className="font-semibold text-white">{post.user.name}</span>
 
-            <span className="text-white/40">@ayomide</span>
+            <span className="text-white/40">@{post.user.userName}</span>
 
             <span className="text-white/30">•</span>
 
-            <span className="text-white/40">2h</span>
+            <span className="text-white/40">{formatPostTime(post.createdAt)}</span>
           </div>
 
           {/* Post Content */}
           <div className="m-3">
             <p className="text-[15px] leading-6 text-white/90">
-              Building a social media app from scratch with React, Tailwind,
-              Zustand and Express. The goal is to keep the UI extremely clean,
-              minimal and premium while maintaining excellent performance.
+              {post.postText}
             </p>
-            <MediaGrid media={media} />
+            <MediaGrid media={post.postMedia} />
           </div>
         </div>
       </div>
