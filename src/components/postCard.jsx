@@ -8,10 +8,21 @@ import {
 } from "lucide-react";
 import MediaGrid from "./mediaGrid";
 import QuoteCard from "./quoteCard";
+import { get_post_detail } from "../../services/post.services";
+import { formatPostTime, formatTimeAndDate } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const PostCard = ({ post }) => {
+  const navigate = useNavigate()
+
+  const handlePostOnclick = () => {
+    navigate(`/post/${post.postId}`);
+  }
+  // console.log(get_post_detail(post.quoteId))
   return (
-    <div className="w-full max-w-2xl b g-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition">
+    <div 
+    onClick={handlePostOnclick}
+    className="w-full max-w-2xl b g-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition">
       {/* Header */}
       {post.repost.length > 0 && (
         <div className="ml-7 mb-1 text-white/40 flex items-center gap-2">
@@ -38,7 +49,7 @@ const PostCard = ({ post }) => {
 
             <span className="text-white/30">•</span>
 
-            <span className="text-white/40">{post.createdAt}</span>
+            <span className="text-white/40">{formatPostTime(post.createdAt)}</span>
           </div>
 
           {/* Post Content */}
@@ -52,7 +63,7 @@ const PostCard = ({ post }) => {
 
           {post.quoteId && (
             <div>
-              <QuoteCard />
+              <QuoteCard post= {get_post_detail(post.quoteId)} />
             </div>
           )}
 
@@ -60,7 +71,7 @@ const PostCard = ({ post }) => {
           <div className="flex items-center gap-8 text-white/50 justify-between mt-4">
             <button className="flex items-center gap-2 hover:text-white transition-colors">
               <MessageCircle size={18} />
-              <span className="text-sm">24</span>
+              <span className="text-sm">{post.comments.length}</span>
             </button>
 
             <button className="flex items-center gap-2 hover:text-white transition-colors">
