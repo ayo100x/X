@@ -16,28 +16,38 @@ import {
   Flag,
 } from "lucide-react";
 import MediaGrid from "./mediaGrid";
+import { formatTimeAndDate } from "../utils/helpers";
+import QuoteCard from "./quoteCard";
+import { get_post_detail } from "../../services/post.services";
+import { user } from "../stores/user.store";
 
-const PostDetailsCard = () => {
+const PostDetailsCard = ({ post }) => {
+
   const [reply, setReply] = useState("");
   const [isReplyFocused, setIsReplyFocused] = useState(false);
-  const media = [
-    "https://picsum.photos/800/500",
-    "https://picsum.photos/600/600",
-  ];
 
   return (
     <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10">
       {/* HEADER */}
+      {post.repost.length > 0 && (
+        <div className="ml-7 mb-1 text-white/40 flex items-center gap-2">
+          <Repeat2 className="size-5" /> You reposted
+        </div>
+      )}
       <div className="flex items-start justify-between">
         <div className="flex gap-3">
           <div className="h-12 w-12 rounded-full bg-white/10 flex items-center justify-center font-medium">
-            A
+            <img
+              src={post.user.userIcon}
+              alt=""
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
 
           <div className="flex flex-col">
-            <span className="text-[15px] font-semibold">Ayomide</span>
+            <span className="text-[15px] font-semibold">{post.user.name}</span>
 
-            <span className="text-sm text-white/50">@ayomide</span>
+            <span className="text-sm text-white/50">{post.user.userName}</span>
           </div>
         </div>
 
@@ -55,27 +65,27 @@ const PostDetailsCard = () => {
       {/* CONTENT */}
       <div className="mt-5">
         <span className="block text-[15px] leading-7 text-white/90">
-          Building a social media platform with React, Tailwind, Zustand and
-          Express. Focusing heavily on creating a premium user experience,
-          smooth interactions and a clean modern interface inspired by X.
+          {post.postText}
         </span>
 
-        <MediaGrid media={media} />
+        <MediaGrid media={post.postMedia} />
       </div>
+      {post.quoteId && (< QuoteCard post={get_post_detail(post.quoteId)} />)}
+      
 
       {/* META */}
       <div className="mt-5 pb-4 border-b border-white/10">
         <div className="flex flex-wrap items-center gap-2 text-sm text-white/50">
-          <span>3:52 PM</span>
+          <span>{formatTimeAndDate(post.createdAt).time}</span>
 
           <span>•</span>
 
-          <span>Jun 3, 2026</span>
+          <span>{formatTimeAndDate(post.createdAt).date}</span>
 
           <span>•</span>
 
           <span>
-            <span className="text-white/80 font-medium">127.9K</span> Views
+            <span className="text-white/80 font-medium">{post.views}</span> Views
           </span>
         </div>
       </div>
@@ -122,14 +132,18 @@ const PostDetailsCard = () => {
         <div className="flex gap-3">
           {/* Avatar */}
           <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-            A
+            <img
+                src={user.userIcon}
+                alt=""
+                className="w-full h-full object-cover rounded-full"
+              />
           </div>
 
           <div className="flex-1">
             {isReplyFocused && (
               <div className="mb-2">
                 <span className="text-sm text-white/50">
-                  Replying to <span className="text-blue-400">@ayomide</span>
+                  Replying to <span className="text-blue-400">@{post.user.userName}</span>
                 </span>
               </div>
             )}
@@ -238,6 +252,7 @@ const PostDetailsCard = () => {
         </div>
       </div>
     </div>
+    
   );
 };
 
