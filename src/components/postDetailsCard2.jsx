@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MessageCircle,
   Repeat2,
@@ -34,6 +34,22 @@ const PostDetailsCard2 = ({ post }) => {
   useEffect(() => {
     getRepliedPost();
   }, [post.replyId]);
+
+  const composerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!composerRef.current?.contains(e.target)) {
+        setIsReplyFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-2xl bg-black text-white">
@@ -214,73 +230,72 @@ const PostDetailsCard2 = ({ post }) => {
         </div>
 
         {/* Reply Composer */}
-        <div className="py-4">
-          <div className="flex gap-3">
-            <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-              <img
-                src={user.userIcon}
-                alt=""
-                className="w-full h-full object-cover rounded-full"
-              />
-            </div>
 
-            <div className="flex-1">
-              {isReplyFocused && (
-                <div className="mb-2">
-                  <span className="text-sm text-white/50">
-                    Replying to{" "}
-                    <span className="text-blue-400">@{post.user.userName}</span>
-                  </span>
-                </div>
-              )}
+        <div className="flex gap-3 py-4" ref={composerRef}>
+          <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+            <img
+              src={user.userIcon}
+              alt=""
+              className="w-full h-full object-cover rounded-full"
+            />
+          </div>
 
-              {!isReplyFocused ? (
-                <div className="flex items-center gap-3">
-                  <textarea
-                    value={reply}
-                    onChange={(e) => setReply(e.target.value)}
-                    onFocus={() => setIsReplyFocused(true)}
-                    placeholder="Post your reply"
-                    rows={1}
-                    className="flex-1 bg-transparent resize-none outline-none placeholder:text-white/40 text-[15px]"
-                  />
+          <div className="flex-1">
+            {isReplyFocused && (
+              <div className="mb-2">
+                <span className="text-sm text-white/50">
+                  Replying to{" "}
+                  <span className="text-blue-400">@{post.user.userName}</span>
+                </span>
+              </div>
+            )}
+
+            {!isReplyFocused ? (
+              <div className="flex items-center gap-3">
+                <textarea
+                  value={reply}
+                  onChange={(e) => setReply(e.target.value)}
+                  onFocus={() => setIsReplyFocused(true)}
+                  placeholder="Post your reply"
+                  rows={1}
+                  className="flex-1 bg-transparent resize-none outline-none placeholder:text-white/40 text-[15px]"
+                />
+
+                <button className="px-5 py-2 rounded-full bg-white text-black text-sm font-semibold">
+                  Reply
+                </button>
+              </div>
+            ) : (
+              <>
+                <textarea
+                  value={reply}
+                  onChange={(e) => setReply(e.target.value)}
+                  rows={3}
+                  placeholder="Post your reply"
+                  className="w-full bg-transparent resize-none outline-none placeholder:text-white/40 text-[15px]"
+                />
+
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-white/60">
+                    <Image size={18} />
+
+                    <Gift size={18} />
+
+                    <Sparkles size={18} />
+
+                    <Smile size={18} />
+
+                    <MapPin size={18} />
+
+                    <Flag size={18} />
+                  </div>
 
                   <button className="px-5 py-2 rounded-full bg-white text-black text-sm font-semibold">
                     Reply
                   </button>
                 </div>
-              ) : (
-                <>
-                  <textarea
-                    value={reply}
-                    onChange={(e) => setReply(e.target.value)}
-                    rows={3}
-                    placeholder="Post your reply"
-                    className="w-full bg-transparent resize-none outline-none placeholder:text-white/40 text-[15px]"
-                  />
-
-                  <div className="mt-4 flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-white/60">
-                      <Image size={18} />
-
-                      <Gift size={18} />
-
-                      <Sparkles size={18} />
-
-                      <Smile size={18} />
-
-                      <MapPin size={18} />
-
-                      <Flag size={18} />
-                    </div>
-
-                    <button className="px-5 py-2 rounded-full bg-white text-black text-sm font-semibold">
-                      Reply
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>

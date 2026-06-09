@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MoreHorizontal,
   Sparkles,
@@ -22,9 +22,24 @@ import { get_post_detail } from "../../services/post.services";
 import { user } from "../stores/user.store";
 
 const PostDetailsCard = ({ post }) => {
-
   const [reply, setReply] = useState("");
   const [isReplyFocused, setIsReplyFocused] = useState(false);
+
+  const composerRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!composerRef.current?.contains(e.target)) {
+        setIsReplyFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10">
@@ -70,8 +85,7 @@ const PostDetailsCard = ({ post }) => {
 
         <MediaGrid media={post.postMedia} />
       </div>
-      {post.quoteId && (< QuoteCard post={get_post_detail(post.quoteId)} />)}
-      
+      {post.quoteId && <QuoteCard post={get_post_detail(post.quoteId)} />}
 
       {/* META */}
       <div className="mt-5 pb-4 border-b border-white/10">
@@ -85,7 +99,8 @@ const PostDetailsCard = ({ post }) => {
           <span>•</span>
 
           <span>
-            <span className="text-white/80 font-medium">{post.views}</span> Views
+            <span className="text-white/80 font-medium">{post.views}</span>{" "}
+            Views
           </span>
         </div>
       </div>
@@ -128,36 +143,37 @@ const PostDetailsCard = ({ post }) => {
       </div>
 
       {/* REPLY COMPOSER */}
-      <div className="py-4">
-        <div className="flex gap-3">
-          {/* Avatar */}
-          <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-            <img
-                src={user.userIcon}
-                alt=""
-                className="w-full h-full object-cover rounded-full"
-              />
-          </div>
 
-          <div className="flex-1">
-            {isReplyFocused && (
-              <div className="mb-2">
-                <span className="text-sm text-white/50">
-                  Replying to <span className="text-blue-400">@{post.user.userName}</span>
-                </span>
-              </div>
-            )}
+      <div className="flex gap-3 py-4" ref={composerRef}>
+        {/* Avatar */}
+        <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+          <img
+            src={user.userIcon}
+            alt=""
+            className="w-full h-full object-cover rounded-full"
+          />
+        </div>
 
-            {/* COLLAPSED */}
-            {!isReplyFocused ? (
-              <div className="flex items-center gap-3">
-                <textarea
-                  value={reply}
-                  onChange={(e) => setReply(e.target.value)}
-                  onFocus={() => setIsReplyFocused(true)}
-                  placeholder="Post your reply"
-                  rows={1}
-                  className="
+        <div className="flex-1">
+          {isReplyFocused && (
+            <div className="mb-2">
+              <span className="text-sm text-white/50">
+                Replying to{" "}
+                <span className="text-blue-400">@{post.user.userName}</span>
+              </span>
+            </div>
+          )}
+
+          {/* COLLAPSED */}
+          {!isReplyFocused ? (
+            <div className="flex items-center gap-3">
+              <textarea
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                onFocus={() => setIsReplyFocused(true)}
+                placeholder="Post your reply"
+                rows={1}
+                className="
                     flex-1
                     bg-transparent
                     resize-none
@@ -166,10 +182,10 @@ const PostDetailsCard = ({ post }) => {
                     text-[15px]
                     leading-6
                   "
-                />
+              />
 
-                <button
-                  className="
+              <button
+                className="
                     px-5
                     py-2
                     rounded-full
@@ -180,19 +196,19 @@ const PostDetailsCard = ({ post }) => {
                     hover:bg-white/90
                     transition
                   "
-                >
-                  Reply
-                </button>
-              </div>
-            ) : (
-              <>
-                {/* EXPANDED */}
-                <textarea
-                  value={reply}
-                  onChange={(e) => setReply(e.target.value)}
-                  placeholder="Post your reply"
-                  rows={3}
-                  className="
+              >
+                Reply
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* EXPANDED */}
+              <textarea
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                placeholder="Post your reply"
+                rows={3}
+                className="
                     w-full
                     bg-transparent
                     resize-none
@@ -201,37 +217,37 @@ const PostDetailsCard = ({ post }) => {
                     text-[15px]
                     leading-6
                   "
-                />
+              />
 
-                <div className="mt-4 flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-white/60">
-                    <button className="hover:text-white transition">
-                      <Image size={18} />
-                    </button>
+              <div className="mt-4 flex items-center justify-between">
+                <div className="flex items-center gap-4 text-white/60">
+                  <button className="hover:text-white transition">
+                    <Image size={18} />
+                  </button>
 
-                    <button className="hover:text-white transition">
-                      <Gift size={18} />
-                    </button>
+                  <button className="hover:text-white transition">
+                    <Gift size={18} />
+                  </button>
 
-                    <button className="hover:text-white transition">
-                      <Sparkles size={18} />
-                    </button>
+                  <button className="hover:text-white transition">
+                    <Sparkles size={18} />
+                  </button>
 
-                    <button className="hover:text-white transition">
-                      <Smile size={18} />
-                    </button>
+                  <button className="hover:text-white transition">
+                    <Smile size={18} />
+                  </button>
 
-                    <button className="hover:text-white transition">
-                      <MapPin size={18} />
-                    </button>
+                  <button className="hover:text-white transition">
+                    <MapPin size={18} />
+                  </button>
 
-                    <button className="hover:text-white transition">
-                      <Flag size={18} />
-                    </button>
-                  </div>
+                  <button className="hover:text-white transition">
+                    <Flag size={18} />
+                  </button>
+                </div>
 
-                  <button
-                    className="
+                <button
+                  className="
                       px-5
                       py-2
                       rounded-full
@@ -242,17 +258,15 @@ const PostDetailsCard = ({ post }) => {
                       hover:bg-white/90
                       transition
                     "
-                  >
-                    Reply
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                >
+                  Reply
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
-    
   );
 };
 
