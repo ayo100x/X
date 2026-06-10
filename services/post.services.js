@@ -94,15 +94,31 @@ export const create_post = (postData) => {
 
 // if postData.repostId => find a (post) with post.postId == postData.repostId and store the userId under repost[]
 
-const repost = (postId) => {
+export const repost = (postId) => {
   // get user re posting
   const auth_user = user;
 
   // check if post exists
   const postToRepost = posts.findIndex((post) => post.postId === postId);
 
-  posts[postToRepost] = {
-    ...posts[postToRepost],
-    repost: [...posts[postToRepost].repost, auth_user.userId],
-  };
+  if (postToRepost != -1) {
+    posts[postToRepost] = {
+      ...posts[postToRepost],
+      repost: [...posts[postToRepost].repost, auth_user.userId],
+    };
+  }
+};
+
+const likePost = (postId) => {
+  const auth_user = user;
+  const postToLike = posts.findIndex((post) => post.postId === postId);
+
+  if (postToLike != -1) {
+    // increase the number of likes of the post
+    const likes = posts[postToLike].likes 
+    posts[postToLike] = {
+        ...posts[postToLike],
+        likes: likes + 1;
+    }
+  }
 };
