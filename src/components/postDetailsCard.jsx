@@ -78,7 +78,7 @@ const PostDetailsCard = ({ post }) => {
       </div>
 
       {/* CONTENT */}
-      <div className="mt-5">
+      <div className="mt-5 ml-2">
         <span className="block text-[15px] leading-7 text-white/90 whitespace-pre-wrap">
           {post.postText}
         </span>
