@@ -28,10 +28,9 @@ const PostComposer = () => {
 
     if (!el) return;
 
-    // reset height before recalculating
-    el.style.height = "0px";
+    // reset correctly
+    el.style.height = "auto";
 
-    // grow up to max 80% of viewport height
     const maxHeight = window.innerHeight * 0.8;
 
     el.style.height = Math.min(el.scrollHeight, maxHeight) + "px";
@@ -70,6 +69,7 @@ const PostComposer = () => {
       return prev.filter((m) => m.id !== id);
     });
   };
+
   const create_post = usePostStore((state) => state.create_post);
 
   const createPostOnClick = () => {
@@ -82,6 +82,12 @@ const PostComposer = () => {
 
     setText("");
     setMedia([]);
+
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+    }
+
   };
 
   return (
