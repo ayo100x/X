@@ -1,0 +1,687 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { create_post } from "../../services/post.services";
+
+export const usePostStore = create(
+  persist((set, get) => ({
+    posts: [
+      {
+        postId: 1,
+        postText:
+          "Just shipped a new feature today. Feeling good about this one.",
+        postMedia: [],
+        quoteId: null,
+        repost: [2, 5],
+        replyId: null,
+        likes: 12,
+        views: "184",
+        comments: [],
+        createdAt: "2026-06-06T10:45:00Z",
+        user: {
+          userId: 1,
+          name: "John Carter",
+          userName: "johncarter",
+          userIcon: "https://i.pravatar.cc/150?img=11",
+        },
+      },
+      {
+        postId: 2,
+        postText: "Debugging code at 2am hits different.",
+        postMedia: ["https://picsum.photos/800/500?random=1"],
+        quoteId: null,
+        repost: [1],
+        replyId: null,
+        likes: 38,
+        views: "1.2k",
+        comments: [8],
+        createdAt: "2026-06-06T09:30:00Z",
+        user: {
+          userId: 2,
+          name: "Sophia Williams",
+          userName: "sophiaw",
+          userIcon: "https://i.pravatar.cc/150?img=32",
+        },
+      },
+      {
+        postId: 3,
+        postText: "Frontend performance is underrated in most projects.",
+        postMedia: [],
+        quoteId: 1,
+        repost: [6, 8],
+        replyId: null,
+        likes: 91,
+        views: "3.8k",
+        comments: [6, 11],
+        createdAt: "2026-06-06T08:10:00Z",
+        user: {
+          userId: 3,
+          name: "Michael Brown",
+          userName: "mikebrown",
+          userIcon: "https://i.pravatar.cc/150?img=15",
+        },
+      },
+      {
+        postId: 4,
+        postText: "Coffee + code = productive morning.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 7,
+        views: "95",
+        comments: [],
+        createdAt: "2026-06-06T07:55:00Z",
+        user: {
+          userId: 4,
+          name: "Emma Johnson",
+          userName: "emmaj",
+          userIcon: "https://i.pravatar.cc/150?img=24",
+        },
+      },
+      {
+        postId: 5,
+        postText: "UI inspiration I saved from Dribbble today.",
+        postMedia: [
+          "https://picsum.photos/800/500?random=2",
+          "https://picsum.photos/800/500?random=3",
+        ],
+        quoteId: null,
+        repost: [2, 3],
+        replyId: null,
+        likes: 156,
+        views: "8.1k",
+        comments: [2, 9, 14],
+        createdAt: "2026-06-06T06:40:00Z",
+        user: {
+          userId: 5,
+          name: "Daniel Wilson",
+          userName: "danwilson",
+          userIcon: "https://i.pravatar.cc/150?img=18",
+        },
+      },
+      {
+        postId: 6,
+        postText: "Hot take: good UX beats fancy UI every time.",
+        postMedia: [],
+        quoteId: null,
+        repost: [1, 4],
+        replyId: null,
+        likes: 23,
+        views: "742",
+        comments: [11],
+        createdAt: "2026-06-06T05:20:00Z",
+        user: {
+          userId: 6,
+          name: "Olivia Davis",
+          userName: "oliviad",
+          userIcon: "https://i.pravatar.cc/150?img=41",
+        },
+      },
+      {
+        postId: 7,
+        postText: "Anyone else struggling with state management lately?",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 44,
+        views: "1.9k",
+        comments: [8, 15],
+        createdAt: "2026-06-06T04:10:00Z",
+        user: {
+          userId: 7,
+          name: "James Anderson",
+          userName: "janderson",
+          userIcon: "https://i.pravatar.cc/150?img=12",
+        },
+      },
+      {
+        postId: 8,
+        postText: "Replying with a fix that worked for me.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: 7,
+        likes: 3,
+        views: "56",
+        comments: [],
+        createdAt: "2026-06-06T03:50:00Z",
+        user: {
+          userId: 8,
+          name: "Ava Martinez",
+          userName: "avam",
+          userIcon: "https://i.pravatar.cc/150?img=44",
+        },
+      },
+      {
+        postId: 9,
+        postText: "This design system is starting to look clean.",
+        postMedia: [
+          "https://picsum.photos/800/500?random=4",
+          "https://picsum.photos/800/500?random=5",
+          "https://picsum.photos/800/500?random=6",
+        ],
+        quoteId: null,
+        repost: [4, 5],
+        replyId: null,
+        likes: 278,
+        views: "15.2k",
+        comments: [12, 19, 22, 25],
+        createdAt: "2026-06-05T23:30:00Z",
+        user: {
+          userId: 9,
+          name: "Ethan Thomas",
+          userName: "ethant",
+          userIcon: "https://i.pravatar.cc/150?img=13",
+        },
+      },
+      {
+        postId: 10,
+        postText: "Data visualization makes everything clearer.",
+        postMedia: ["https://picsum.photos/800/500?random=8"],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 65,
+        views: "2.7k",
+        comments: [4],
+        createdAt: "2026-06-05T22:10:00Z",
+        user: {
+          userId: 10,
+          name: "Mia Taylor",
+          userName: "miataylor",
+          userIcon: "https://i.pravatar.cc/150?img=48",
+        },
+      },
+
+      {
+        postId: 11,
+        postText: "Following up on yesterday’s discussion.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: 6,
+        likes: 18,
+        views: "491",
+        comments: [],
+        createdAt: "2026-06-05T21:45:00Z",
+        user: {
+          userId: 11,
+          name: "Benjamin Moore",
+          userName: "benmoore",
+          userIcon: "https://i.pravatar.cc/150?img=19",
+        },
+      },
+      {
+        postId: 12,
+        postText: "This thread deserves more attention.",
+        postMedia: [],
+        quoteId: 9,
+        repost: [3, 7],
+        replyId: null,
+        likes: 337,
+        views: "21.4k",
+        comments: [3, 5, 9, 18],
+        createdAt: "2026-06-05T20:30:00Z",
+        user: {
+          userId: 12,
+          name: "Charlotte White",
+          userName: "charlottew",
+          userIcon: "https://i.pravatar.cc/150?img=25",
+        },
+      },
+      {
+        postId: 13,
+        postText: "Weekend project progress update 🚀",
+        postMedia: [
+          "https://picsum.photos/800/500?random=9",
+          "https://picsum.photos/800/500?random=10",
+        ],
+        quoteId: null,
+        repost: [2, 9],
+        replyId: null,
+        likes: 112,
+        views: "6.3k",
+        comments: [21, 24],
+        createdAt: "2026-06-05T19:10:00Z",
+        user: {
+          userId: 13,
+          name: "Lucas Harris",
+          userName: "lucash",
+          userIcon: "https://i.pravatar.cc/150?img=16",
+        },
+      },
+
+      {
+        postId: 14,
+        postText: "What stack would you use for a Twitter clone?",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 29,
+        views: "1.1k",
+        comments: [15],
+        createdAt: "2026-06-05T18:40:00Z",
+        user: {
+          userId: 14,
+          name: "Amelia Clark",
+          userName: "ameliac",
+          userIcon: "https://i.pravatar.cc/150?img=37",
+        },
+      },
+
+      {
+        postId: 15,
+        postText: "Authentication systems are trickier than they look.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: 14,
+        likes: 6,
+        views: "83",
+        comments: [],
+        createdAt: "2026-06-05T18:10:00Z",
+        user: {
+          userId: 15,
+          name: "Henry Lewis",
+          userName: "henrylewis",
+          userIcon: "https://i.pravatar.cc/150?img=20",
+        },
+      },
+
+      {
+        postId: 16,
+        postText: "Great insight on system design patterns.",
+        postMedia: [],
+        quoteId: 14,
+        repost: [1, 5],
+        replyId: null,
+        likes: 198,
+        views: "11.8k",
+        comments: [14, 20, 27],
+        createdAt: "2026-06-05T17:40:00Z",
+        user: {
+          userId: 16,
+          name: "Harper Walker",
+          userName: "harperw",
+          userIcon: "https://i.pravatar.cc/150?img=45",
+        },
+      },
+
+      {
+        postId: 17,
+        postText: "Travel dump 🌍",
+        postMedia: [
+          "https://picsum.photos/800/500?random=11",
+          "https://picsum.photos/800/500?random=12",
+        ],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 72,
+        views: "4.5k",
+        comments: [18],
+        createdAt: "2026-06-05T16:20:00Z",
+        user: {
+          userId: 17,
+          name: "Alexander Hall",
+          userName: "alexhall",
+          userIcon: "https://i.pravatar.cc/150?img=14",
+        },
+      },
+
+      {
+        postId: 18,
+        postText: "Fixed the issue from earlier 👍",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: 17,
+        likes: 15,
+        views: "328",
+        comments: [],
+        createdAt: "2026-06-05T15:55:00Z",
+        user: {
+          userId: 18,
+          name: "Evelyn Allen",
+          userName: "evelyna",
+          userIcon: "https://i.pravatar.cc/150?img=39",
+        },
+      },
+
+      {
+        postId: 19,
+        postText: "This deserves way more visibility.",
+        postMedia: [],
+        quoteId: 17,
+        repost: [1, 2, 3],
+        replyId: null,
+        likes: 529,
+        views: "42.7k",
+        comments: [2, 7, 11, 16, 24],
+        createdAt: "2026-06-05T14:30:00Z",
+        user: {
+          userId: 19,
+          name: "Matthew Young",
+          userName: "mattyoung",
+          userIcon: "https://i.pravatar.cc/150?img=17",
+        },
+      },
+
+      {
+        postId: 20,
+        postText: "Deployment went smooth today.",
+        postMedia: [],
+        quoteId: null,
+        repost: [6, 7],
+        replyId: null,
+        likes: 31,
+        views: "1.6k",
+        comments: [5],
+        createdAt: "2026-06-05T13:20:00Z",
+        user: {
+          userId: 20,
+          name: "Grace King",
+          userName: "graceking",
+          userIcon: "https://i.pravatar.cc/150?img=46",
+        },
+      },
+
+      // 21–30 (same structure)
+      {
+        postId: 21,
+        postText: "Learning React Query today.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 87,
+        views: "5.1k",
+        comments: [22, 23],
+        createdAt: "2026-06-05T12:00:00Z",
+        user: {
+          userId: 3,
+          name: "Michael Brown",
+          userName: "mikebrown",
+          userIcon: "https://i.pravatar.cc/150?img=15",
+        },
+      },
+
+      {
+        postId: 22,
+        postText: "Dark mode just hits different.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 4,
+        views: "67",
+        comments: [],
+        createdAt: "2026-06-05T11:30:00Z",
+        user: {
+          userId: 4,
+          name: "Emma Johnson",
+          userName: "emmaj",
+          userIcon: "https://i.pravatar.cc/150?img=24",
+        },
+      },
+
+      {
+        postId: 23,
+        postText: "Trying out a new UI library.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 146,
+        views: "9.4k",
+        comments: [12, 18],
+        createdAt: "2026-06-05T10:50:00Z",
+        user: {
+          userId: 6,
+          name: "Olivia Davis",
+          userName: "oliviad",
+          userIcon: "https://i.pravatar.cc/150?img=41",
+        },
+      },
+
+      {
+        postId: 24,
+        postText: "State management wars are real 😂",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 58,
+        views: "2.3k",
+        comments: [29],
+        createdAt: "2026-06-05T10:10:00Z",
+        user: {
+          userId: 7,
+          name: "James Anderson",
+          userName: "janderson",
+          userIcon: "https://i.pravatar.cc/150?img=12",
+        },
+      },
+
+      {
+        postId: 25,
+        postText: "Designing better APIs today.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 19,
+        views: "615",
+        comments: [],
+        createdAt: "2026-06-05T09:40:00Z",
+        user: {
+          userId: 9,
+          name: "Ethan Thomas",
+          userName: "ethant",
+          userIcon: "https://i.pravatar.cc/150?img=13",
+        },
+      },
+
+      {
+        postId: 26,
+        postText: "Backend logic is underrated.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 410,
+        views: "31.2k",
+        comments: [4, 8, 17, 20],
+        createdAt: "2026-06-05T09:00:00Z",
+        user: {
+          userId: 10,
+          name: "Mia Taylor",
+          userName: "miataylor",
+          userIcon: "https://i.pravatar.cc/150?img=48",
+        },
+      },
+
+      {
+        postId: 27,
+        postText: "Just refactored a messy component.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 96,
+        views: "7.2k",
+        comments: [30],
+        createdAt: "2026-06-05T08:30:00Z",
+        user: {
+          userId: 12,
+          name: "Charlotte White",
+          userName: "charlottew",
+          userIcon: "https://i.pravatar.cc/150?img=25",
+        },
+      },
+
+      {
+        postId: 28,
+        postText: "Component reusability is key.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 11,
+        views: "203",
+        comments: [],
+        createdAt: "2026-06-05T08:00:00Z",
+        user: {
+          userId: 13,
+          name: "Lucas Harris",
+          userName: "lucash",
+          userIcon: "https://i.pravatar.cc/150?img=16",
+        },
+      },
+
+      {
+        postId: 29,
+        postText: "Building side projects keeps me sane.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 224,
+        views: "13.7k",
+        comments: [3, 6, 12],
+        createdAt: "2026-06-05T07:20:00Z",
+        user: {
+          userId: 14,
+          name: "Amelia Clark",
+          userName: "ameliac",
+          userIcon: "https://i.pravatar.cc/150?img=37",
+        },
+      },
+
+      {
+        postId: 30,
+        postText: "Another day, another deploy 🚀",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: null,
+        likes: 61,
+        views: "2.9k",
+        comments: [1, 5],
+        createdAt: "2026-06-05T06:50:00Z",
+        user: {
+          userId: 20,
+          name: "Grace King",
+          userName: "graceking",
+          userIcon: "https://i.pravatar.cc/150?img=46",
+        },
+      },
+      {
+        postId: 31,
+        postText: "This is a new post.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: 7,
+        likes: 3,
+        views: "56",
+        comments: [],
+        createdAt: "2026-06-06T03:50:00Z",
+        user: {
+          userId: 8,
+          name: "Ava Martinez",
+          userName: "avam",
+          userIcon: "https://i.pravatar.cc/150?img=44",
+        },
+      },
+      {
+        postId: 32,
+        postText: "This is a new comment.",
+        postMedia: [],
+        quoteId: null,
+        repost: [],
+        replyId: 8,
+        likes: 3,
+        views: "56",
+        comments: [],
+        createdAt: "2026-06-06T03:50:00Z",
+        user: {
+          userId: 8,
+          name: "Ava Martinez",
+          userName: "avam",
+          userIcon: "https://i.pravatar.cc/150?img=44",
+        },
+      },
+    ],
+
+    user: {
+      userId: 1,
+      name: "ayo",
+      userName: "ayomide",
+      userIcon: "https://i.pravatar.cc/150?img=48",
+    },
+
+    create_post: (postData) => {
+
+      const { user, posts } = get(); // get list of post from zustand
+      console.log(posts);
+
+      if (!postData.postText && !postData.postMedia) {
+        // show error toast // Enter a text
+        return;
+      }
+
+      // generate id
+      const postId = Date.now();
+
+      const newPost = {
+        postId: postId,
+        postText: postData.postText,
+        postMedia: postData.postMedia ?? [],
+        quoteId: postData?.quoteId,
+        repost: [],
+        quote: [],
+        replyId: postData?.replyId,
+        likes: 0,
+        views: "0",
+        comments: [],
+        createdAt: new Date().toISOString(),
+        user: {
+          userId: user.userId,
+          name: user.name,
+          userName: user.userName,
+          userIcon: user.userIcon,
+        },
+      };
+
+      set((state) => ({
+        posts: [newPost, ...state.posts],
+      }));
+
+      // if postData.quoteId => find a (post) with post.postId == postData.quoteId and store the postId under quote[]
+      if (postData?.quoteId) {
+        set((state) => ({
+          posts: state.posts.map((p) =>
+            p.postId === postData.quoteId
+              ? { ...p, quote: [...p.quote, postId] }
+              : p,
+          ),
+        }));
+      }
+
+      // if postData.replyId => find a (post) with post.postId == postData.replyId and store the postId under comments[]
+      if (postData?.replyId) {
+        set((state) => ({
+          posts: state.posts.map((p) =>
+            p.postId === postData.replyId
+              ? { ...p, comments: [...p.comments, postId] }
+              : p,
+          ),
+        }));
+      }
+    },
+    name: "post-storage",
+  })),
+);
