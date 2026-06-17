@@ -89,7 +89,7 @@ const PostDetailsCard2 = ({ post }) => {
           </div>
 
           <div className="mt-2">
-            <span className="block text-[15px] leading-6 text-white/90">
+            <span className="block text-[15px] leading-6 text-white/90 whitespace-pre-wrap">
               {repliedPost?.postText}
             </span>
 
@@ -177,7 +177,7 @@ const PostDetailsCard2 = ({ post }) => {
         <div className="flex-1">
           {/* Content */}
           <div className="mt-4">
-            <span className="block text-[15px] leading-7 text-white/90">
+            <span className="block text-[15px] leading-7 text-white/90 whitespace-pre-wrap">
               {post.postText}
             </span>
             <MediaGrid media={post.postMedia} />

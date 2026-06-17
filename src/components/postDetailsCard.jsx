@@ -79,7 +79,7 @@ const PostDetailsCard = ({ post }) => {
 
       {/* CONTENT */}
       <div className="mt-5">
-        <span className="block text-[15px] leading-7 text-white/90">
+        <span className="block text-[15px] leading-7 text-white/90 whitespace-pre-wrap">
           {post.postText}
         </span>
 
