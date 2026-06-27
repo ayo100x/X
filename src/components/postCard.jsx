@@ -5,6 +5,8 @@ import {
   BarChart2,
   Bookmark,
   Upload,
+  Sparkles,
+  MoreHorizontal,
 } from "lucide-react";
 import MediaGrid from "./mediaGrid";
 import QuoteCard from "./quoteCard";
@@ -13,10 +15,17 @@ import { formatPostTime, formatTimeAndDate } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import RepostActionCard from "./repostActionCard";
 import { useEffect, useRef, useState } from "react";
+import { usePostStore } from "../stores/post.store";
+import { useCommentComposerStore } from "../stores/useCommentComposerStore";
+import MorePostAction from "./morePostAction";
 
 const PostCard = ({ post }) => {
   const [showRepostAction, setShowRepostAction] = useState(false);
   const [activePost, setActivePost] = useState({});
+  const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
+
+  const user = usePostStore((state) => state.user);
+  const likePost = usePostStore((state) => state.likePost);
 
   const repostRef = useRef(null);
 
@@ -26,10 +35,6 @@ const PostCard = ({ post }) => {
     navigate(`/post/${post.postId}`);
   };
   // console.log(get_post_detail(post.quoteId))
-
-  const handleRepostOnClick = () => {
-    setShowRepostAction(!showRepostAction);
-  };
 
   useEffect(() => {
     if (!showRepostAction) return;
@@ -48,13 +53,55 @@ const PostCard = ({ post }) => {
     };
   }, [showRepostAction]);
 
+  useEffect(() => {
+    if (!showMoreActionButtons) return;
+
+    function handleClickOutside(event) {
+      if (
+        moreActionRef.current &&
+        !moreActionRef.current.contains(event.target)
+      ) {
+        setShowMoreActionButtons(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showMoreActionButtons]);
+
+  const moreActionRef = useRef(null);
+
+  const closeRepostCardActions = () => {
+    setShowRepostAction(false);
+    setActivePost({});
+  };
+
+  const hasReposted = post.repost.includes(user.userId);
+  const hasLiked = post.likes.includes(user.userId);
+
+  const handleLikeOnClick = () => {
+    likePost(post.postId);
+    setHasLiked(!hasLiked);
+  };
+
+  const openCommentComposer = useCommentComposerStore(
+    (state) => state.openCommentComposer,
+  );
+
+  const handleCommentOnClick = () => {
+    openCommentComposer(post);
+  };
+
   return (
     <div
       onClick={handlePostOnclick}
       className="w-full max-w-2xl b g-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition"
     >
       {/* Header */}
-      {post.repost.length > 0 && (
+      {hasReposted && (
         <div className="ml-7 mb-1 text-white/40 flex items-center gap-2">
           <Repeat2 className="size-5" /> You reposted
         </div>
@@ -76,38 +123,81 @@ const PostCard = ({ post }) => {
         </div>
 
         <div className="flex-1 min-w-0">
-          {/* User Info */}
-          <div className="flex items-center gap-2 text-sm">
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className="font-semibold text-white"
-            >
-              {post.user.name}
-            </span>
+          <div className="flex justify-between">
+            {/* User Info */}
+            <div className="flex items-center gap-2 text-sm">
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="font-semibold text-white"
+              >
+                {post.user.name}
+              </span>
 
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className="text-white/40"
-            >
-              @{post.user.userName}
-            </span>
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="text-white/40"
+              >
+                @{post.user.userName}
+              </span>
 
-            <span className="text-white/30">•</span>
+              <span className="text-white/30">•</span>
 
-            <span className="text-white/40">
-              {formatPostTime(post.createdAt)}
-            </span>
+              <span className="text-white/40">
+                {formatPostTime(post.createdAt)}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                className="h-9 w-9 rounded-full  flex items-center justify-center text-white/70 hover:text-white transition"
+              >
+                <Sparkles size={16} />
+              </button>
+
+              <div ref={moreActionRef} className="relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMoreActionButtons((prev) => !prev);
+                  }}
+                  className="h-9 w-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition"
+                >
+                  <MoreHorizontal size={16} />
+                </button>
+
+                {showMoreActionButtons && (
+                  <div>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowMoreActionButtons(false);
+                      }}
+                    />
+
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="absolute right-0 top-full mt-2 z-50"
+                    >
+                      <MorePostAction post={post} />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Post Content */}
           <div className="mt-2 mr-9">
-            <p className="text-[15px] leading-6 text-white/90 whitespace-pre-wrap">
+            <span className="text-[15px] leading-6 text-white/90 whitespace-pre-wrap">
               {post.postText}
-            </p>
+            </span>
 
             <MediaGrid media={post.postMedia} />
           </div>
@@ -120,15 +210,18 @@ const PostCard = ({ post }) => {
 
           {/* Engagement */}
           <div className="flex items-center gap-8 text-white/50 justify-between mt-4">
+            {/* reply button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                handleCommentOnClick();
               }}
               className="flex items-center gap-2 hover:text-white transition-colors"
             >
               <MessageCircle size={18} />
               <span className="text-sm">{post.comments.length}</span>
             </button>
+            {/* repost button */}
             <div ref={repostRef} className="relative">
               <button
                 onClick={(e) => {
@@ -137,7 +230,15 @@ const PostCard = ({ post }) => {
                 }}
                 className="flex items-center gap-2 hover:text-white transition-colors"
               >
-                <Repeat2 size={18} />
+                <div
+                  className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                    hasReposted
+                      ? " text-green-400"
+                      : "text-white/50 hover:bg-green-500/10 hover:text-green-400"
+                  }`}
+                >
+                  <Repeat2 size={18} />
+                </div>
                 <span className="text-sm">{post.repost.length}</span>
               </button>
 
@@ -154,21 +255,45 @@ const PostCard = ({ post }) => {
                   />
 
                   {/* Menu */}
-                  <div className="absolute z-50">
-                    <RepostActionCard />
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className="absolute z-50"
+                  >
+                    <RepostActionCard
+                      post={post}
+                      closeRepostCardActions={closeRepostCardActions}
+                    />
                   </div>
                 </div>
               )}
             </div>
-
+            {/* like button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
+                handleLikeOnClick();
               }}
               className="flex items-center gap-2 hover:text-white transition-colors"
             >
-              <Heart size={18} />
-              <span className="text-sm">{post.likes}</span>
+              <div
+                className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                  hasLiked
+                    ? "fill-pink-500 text-pink-500"
+                    : "text-white/50 hover:bg-pink-500/10 hover:text-pink-500"
+                }`}
+              >
+                <Heart
+                  size={18}
+                  className={`transition-colors ${
+                    hasLiked
+                      ? "fill-pink-500 text-pink-500"
+                      : "text-white/50 group-hover:text-pink-500"
+                  }`}
+                />
+              </div>
+              <span className="text-sm">{post.likes.length}</span>
             </button>
 
             <button
