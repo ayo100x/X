@@ -62,6 +62,7 @@ const PostCard = ({ post }) => {
         !moreActionRef.current.contains(event.target)
       ) {
         setShowMoreActionButtons(false);
+        setActivePost({});
       }
     }
 
@@ -172,11 +173,21 @@ const PostCard = ({ post }) => {
                 </button>
 
                 {showMoreActionButtons && (
-                  <div
-                    onClick={(e) => e.stopPropagation()}
-                    className="absolute right-0 top-full mt-2 z-50"
-                  >
-                    <MorePostAction post={post} />
+                  <div>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowMoreActionButtons(false);
+                      }}
+                    />
+
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      className="absolute right-0 top-full mt-2 z-50"
+                    >
+                      <MorePostAction post={post} />
+                    </div>
                   </div>
                 )}
               </div>
