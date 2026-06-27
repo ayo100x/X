@@ -172,21 +172,11 @@ const PostCard = ({ post }) => {
                 </button>
 
                 {showMoreActionButtons && (
-                  <div>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowMoreActionButtons(false);
-                      }}
-                    />
-
-                    <div
-                      onClick={(e) => e.stopPropagation()}
-                      className="absolute right-0 top-full mt-2 z-50"
-                    >
-                      <MorePostAction post={post} />
-                    </div>
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute right-0 top-full mt-2 z-50"
+                  >
+                    <MorePostAction post={post} />
                   </div>
                 )}
               </div>
