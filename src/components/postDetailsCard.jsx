@@ -21,11 +21,14 @@ import QuoteCard from "./quoteCard";
 import { get_post_detail } from "../../services/post.services";
 import { user } from "../stores/user.store";
 import { usePostStore } from "../stores/post.store";
+import RepostActionCard from "./repostActionCard";
+import { useCommentComposerStore } from "../stores/useCommentComposerStore";
 
 const PostDetailsCard = ({ post }) => {
   const [reply, setReply] = useState("");
   const [media, setMedia] = useState([]);
   const [isReplyFocused, setIsReplyFocused] = useState(false);
+  const [showRepostAction, setShowRepostAction] = useState(false);
 
   const composerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -132,6 +135,24 @@ const PostDetailsCard = ({ post }) => {
 
   const hasLiked = post.likes.includes(user.userId);
 
+  const handleRepostOnClick = () => {
+    setShowRepostAction((prev) => !prev);
+  };
+
+  const closeRepostCardActions = () => {
+    setShowRepostAction(false);
+  };
+
+  const hasReposted = post.repost.includes(user.userId);
+
+  const openCommentComposer = useCommentComposerStore(
+    (state) => state.openCommentComposer,
+  );
+
+  const handleCommentOnClick = () => {
+    openCommentComposer(post);
+  };
+
   return (
     <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10">
       {/* HEADER */}
@@ -202,14 +223,53 @@ const PostDetailsCard = ({ post }) => {
       <div className="mt-3 border-b border-white/10">
         <div className="flex items-center justify-between text-white/60">
           {/* Reply */}
-          <button className="hover:text-white transition">
+          <button
+            onClick={handleCommentOnClick}
+            className="hover:text-white transition"
+          >
             <MessageCircle size={20} />
           </button>
 
           {/* Repost */}
-          <button className="hover:text-white transition">
-            <Repeat2 size={20} />
-          </button>
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                handleRepostOnClick();
+              }}
+              className="flex items-center gap-2 hover:text-white transition-colors"
+            >
+              <div
+                className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                  hasReposted
+                    ? " text-green-400"
+                    : "text-white/50 hover:bg-green-500/10 hover:text-green-400"
+                }`}
+              >
+                <Repeat2 size={18} />
+              </div>
+              <span className="text-sm">{post.repost.length}</span>
+            </button>
+
+            {showRepostAction && (
+              <div>
+                {/* Transparent overlay */}
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={(e) => {
+                    setShowRepostAction(false);
+                  }}
+                />
+
+                {/* Menu */}
+                <div className="absolute z-50">
+                  <RepostActionCard
+                    post={post}
+                    closeRepostCardActions={closeRepostCardActions}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Like */}
           <button
@@ -236,7 +296,7 @@ const PostDetailsCard = ({ post }) => {
             </div>
             <span className="text-sm">{post.likes.length}</span>
           </button>
-          
+
           {/* Bookmark */}
           <button className="hover:text-white transition">
             <Bookmark size={20} />
