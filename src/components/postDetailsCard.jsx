@@ -23,12 +23,14 @@ import { user } from "../stores/user.store";
 import { usePostStore } from "../stores/post.store";
 import RepostActionCard from "./repostActionCard";
 import { useCommentComposerStore } from "../stores/useCommentComposerStore";
+import MorePostAction from "./morePostAction";
 
 const PostDetailsCard = ({ post }) => {
   const [reply, setReply] = useState("");
   const [media, setMedia] = useState([]);
   const [isReplyFocused, setIsReplyFocused] = useState(false);
   const [showRepostAction, setShowRepostAction] = useState(false);
+  const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
 
   const composerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -136,11 +138,11 @@ const PostDetailsCard = ({ post }) => {
   const hasLiked = post.likes.includes(user.userId);
 
   const handleRepostOnClick = () => {
-    setShowRepostAction((prev) => !prev);
+    setShowRepostAction(!showRepostAction);
   };
 
   const closeRepostCardActions = () => {
-    setShowRepostAction(false);
+    setShowRepostAction((prev) => !prev);
   };
 
   const hasReposted = post.repost.includes(user.userId);
@@ -152,6 +154,12 @@ const PostDetailsCard = ({ post }) => {
   const handleCommentOnClick = () => {
     openCommentComposer(post);
   };
+
+  const handleMoreOnClick = () => {
+    setShowMoreActionButtons((prev) => !prev);
+  };
+
+  const moreActionRef = useRef(null);
 
   return (
     <div className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10">
@@ -180,13 +188,37 @@ const PostDetailsCard = ({ post }) => {
         </div>
 
         <div className="flex items-center gap-1">
+          {/* GROK BUTTON */}
           <button className="h-9 w-9 rounded-full  flex items-center justify-center text-white/70 hover:text-white transition">
             <Sparkles size={16} />
           </button>
+          {/* More Action Button */}
+          <div ref={moreActionRef} className="relative">
+            <button
+              onClick={handleMoreOnClick}
+              className="h-9 w-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition"
+            >
+              <MoreHorizontal size={16} />
+            </button>
 
-          <button className="h-9 w-9 rounded-full flex items-center justify-center text-white/70 hover:text-white  transition">
-            <MoreHorizontal size={16} />
-          </button>
+            {showMoreActionButtons && (
+              <div>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => {
+                    setShowMoreActionButtons(false);
+                  }}
+                />
+
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute right-0 top-full mt-2 z-50"
+                >
+                  <MorePostAction post={post} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -233,9 +265,10 @@ const PostDetailsCard = ({ post }) => {
           {/* Repost */}
           <div className="relative">
             <button
-              onClick={(e) => {
-                handleRepostOnClick();
-              }}
+              onClick={
+                
+                handleRepostOnClick
+              }
               className="flex items-center gap-2 hover:text-white transition-colors"
             >
               <div
@@ -273,9 +306,7 @@ const PostDetailsCard = ({ post }) => {
 
           {/* Like */}
           <button
-            onClick={(e) => {
-              handleLikeOnClick();
-            }}
+            onClick={handleLikeOnClick}
             className="flex items-center gap-2 hover:text-white transition-colors"
           >
             <div
