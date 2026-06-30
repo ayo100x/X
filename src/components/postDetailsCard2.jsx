@@ -20,20 +20,26 @@ import QuoteCard from "./quoteCard";
 import { get_post_detail } from "../../services/post.services";
 import { formatPostTime, formatTimeAndDate } from "../utils/helpers";
 import { user } from "../stores/user.store";
+import { usePostStore } from "../stores/post.store";
+import RepostActionCard from "./repostActionCard";
+import { useCommentComposerStore } from "../stores/useCommentComposerStore";
 
 const PostDetailsCard2 = ({ post }) => {
   const [reply, setReply] = useState("");
   const [isReplyFocused, setIsReplyFocused] = useState(false);
   const [repliedPost, setRepliedPost] = useState({});
+  const [showRepostAction, setShowRepostAction] = useState(false);
 
-  const getRepliedPost = () => {
-    const response = get_post_detail(post.replyId);
+  const getRepliedPost = async () => {
+    const response = await get_post_detail(post.replyId);
     setRepliedPost(response);
   };
 
+  const posts = usePostStore((state) => state.posts);
+
   useEffect(() => {
     getRepliedPost();
-  }, [post.replyId]);
+  }, [posts, post.replyId]);
 
   const composerRef = useRef(null);
 
@@ -50,6 +56,26 @@ const PostDetailsCard2 = ({ post }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const hasLiked = repliedPost?.likes?.includes(user.userId) ?? false;
+
+  const likePost = usePostStore((state) => state.likePost);
+
+  const handleLikeOnClick = () => {
+    likePost(repliedPost?.postId);
+  };
+
+  const handleRepostOnClick = () => {
+    setShowRepostAction(!showRepostAction);
+  };
+  const hasReposted = repliedPost?.repost?.includes(user.userId) ?? false;
+
+  const closeRepostCardActions = () => {
+    setShowRepostAction((prev) => !prev);
+  };
+
+  const openCommentComposer = useCommentComposerStore((state) => state.openCommentComposer);
+
 
   return (
     <div className="w-full max-w-2xl bg-black text-white">
@@ -104,21 +130,77 @@ const PostDetailsCard2 = ({ post }) => {
 
           {/* Buttons - like, comment, retweet.. */}
           <div className="flex items-center justify-between mt-4 text-white/50">
-            <button className="flex items-center gap-2 hover:text-white transition">
+            <button
+              onClick={() => openCommentComposer(repliedPost)}
+              className="flex items-center gap-2 hover:text-white transition">
               <MessageCircle size={18} />
               <span className="text-sm">{repliedPost?.comments?.length}</span>
             </button>
 
-            <button className="flex items-center gap-2 hover:text-white transition">
-              <Repeat2 size={18} />
-              <span className="text-sm">{repliedPost?.repost?.length}</span>
+            {/* Repost */}
+            <div className="relative">
+              <button
+                onClick={handleRepostOnClick}
+                className="flex items-center gap-2 hover:text-white transition-colors"
+              >
+                <div
+                  className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                    hasReposted
+                      ? " text-green-400"
+                      : "text-white/50 hover:bg-green-500/10 hover:text-green-400"
+                  }`}
+                >
+                  <Repeat2 size={18} />
+                </div>
+                <span className="text-sm">{repliedPost?.repost?.length}</span>
+              </button>
+
+              {showRepostAction && (
+                <div>
+                  {/* Transparent overlay */}
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={(e) => {
+                      setShowRepostAction(false);
+                    }}
+                  />
+
+                  {/* Menu */}
+                  <div className="absolute z-50">
+                    <RepostActionCard
+                      post={repliedPost}
+                      closeRepostCardActions={closeRepostCardActions}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Like */}
+            <button
+              onClick={handleLikeOnClick}
+              className="flex items-center gap-2 hover:text-white transition-colors"
+            >
+              <div
+                className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                  hasLiked
+                    ? "fill-pink-500 text-pink-500"
+                    : "text-white/50 hover:bg-pink-500/10 hover:text-pink-500"
+                }`}
+              >
+                <Heart
+                  size={18}
+                  className={`transition-colors ${
+                    hasLiked
+                      ? "fill-pink-500 text-pink-500"
+                      : "text-white/50 group-hover:text-pink-500"
+                  }`}
+                />
+              </div>
+              <span className="text-sm">{repliedPost?.likes?.length}</span>
             </button>
 
-            <button className="flex items-center gap-2 hover:text-white transition">
-              <Heart size={18} />
-              <span className="text-sm">{repliedPost?.likes}</span>
-            </button>
-
+            {/* Views */}
             <button className="flex items-center gap-2 hover:text-white transition">
               <BarChart2 size={18} />
               <span className="text-sm">{repliedPost?.views}</span>
@@ -195,9 +277,7 @@ const PostDetailsCard2 = ({ post }) => {
               <span>•</span>
 
               <span>
-                <span className="text-white/80 font-medium">
-                  {post.views.length}
-                </span>{" "}
+                <span className="text-white/80 font-medium">{post.views}</span>{" "}
                 Views
               </span>
             </div>
