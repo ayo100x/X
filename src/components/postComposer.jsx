@@ -75,6 +75,8 @@ const PostComposer = () => {
   const createPostOnClick = () => {
     if (!text.trim() && media.length === 0) return;
 
+    //console.log("called");
+
     create_post({
       postText: text,
       postMedia: media.map((item) => item.preview),
