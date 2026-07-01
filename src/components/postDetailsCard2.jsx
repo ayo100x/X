@@ -23,12 +23,17 @@ import { user } from "../stores/user.store";
 import { usePostStore } from "../stores/post.store";
 import RepostActionCard from "./repostActionCard";
 import { useCommentComposerStore } from "../stores/useCommentComposerStore";
+import MorePostAction from "./morePostAction";
 
 const PostDetailsCard2 = ({ post }) => {
   const [reply, setReply] = useState("");
   const [isReplyFocused, setIsReplyFocused] = useState(false);
   const [repliedPost, setRepliedPost] = useState({});
   const [showRepostAction, setShowRepostAction] = useState(false);
+  const [showRepostAction2, setShowRepostAction2] = useState(false);
+  const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
+
+  const moreActionRef = useRef(null);
 
   const getRepliedPost = async () => {
     const response = await get_post_detail(post.replyId);
@@ -57,25 +62,32 @@ const PostDetailsCard2 = ({ post }) => {
     };
   }, []);
 
-  const hasLiked = repliedPost?.likes?.includes(user.userId) ?? false;
+  const hasLiked_rp = repliedPost?.likes?.includes(user.userId) ?? false; // repliedPost
+  const hasLiked_dp = post.likes.includes(user.userId); // detailedPost
 
   const likePost = usePostStore((state) => state.likePost);
 
-  const handleLikeOnClick = () => {
-    likePost(repliedPost?.postId);
+  const handleLikeOnClick = (postId) => {
+    likePost(postId);
   };
 
   const handleRepostOnClick = () => {
     setShowRepostAction(!showRepostAction);
   };
-  const hasReposted = repliedPost?.repost?.includes(user.userId) ?? false;
+  const hasReposted_rp = repliedPost?.repost?.includes(user.userId) ?? false; // repliedPost
+  const hasReposted_dp = post.repost.includes(user.userId); // detailedPost
 
   const closeRepostCardActions = () => {
-    setShowRepostAction((prev) => !prev);
+    setShowRepostAction2((prev) => !prev);
   };
 
-  const openCommentComposer = useCommentComposerStore((state) => state.openCommentComposer);
+  const openCommentComposer = useCommentComposerStore(
+    (state) => state.openCommentComposer,
+  );
 
+  const handleMoreOnClick = () => {
+    setShowMoreActionButtons((prev) => !prev);
+  };
 
   return (
     <div className="w-full max-w-2xl bg-black text-white">
@@ -130,9 +142,11 @@ const PostDetailsCard2 = ({ post }) => {
 
           {/* Buttons - like, comment, retweet.. */}
           <div className="flex items-center justify-between mt-4 text-white/50">
+            {/* Comment */}
             <button
               onClick={() => openCommentComposer(repliedPost)}
-              className="flex items-center gap-2 hover:text-white transition">
+              className="flex items-center gap-2 hover:text-white transition"
+            >
               <MessageCircle size={18} />
               <span className="text-sm">{repliedPost?.comments?.length}</span>
             </button>
@@ -140,12 +154,12 @@ const PostDetailsCard2 = ({ post }) => {
             {/* Repost */}
             <div className="relative">
               <button
-                onClick={handleRepostOnClick}
+                onClick={() => setShowRepostAction(!showRepostAction)}
                 className="flex items-center gap-2 hover:text-white transition-colors"
               >
                 <div
                   className={`flex items-center justify-center size-8 rounded-full transition-colors ${
-                    hasReposted
+                    hasReposted_rp
                       ? " text-green-400"
                       : "text-white/50 hover:bg-green-500/10 hover:text-green-400"
                   }`}
@@ -178,12 +192,14 @@ const PostDetailsCard2 = ({ post }) => {
 
             {/* Like */}
             <button
-              onClick={handleLikeOnClick}
+              onClick={() => {
+                handleLikeOnClick(repliedPost?.postId);
+              }}
               className="flex items-center gap-2 hover:text-white transition-colors"
             >
               <div
                 className={`flex items-center justify-center size-8 rounded-full transition-colors ${
-                  hasLiked
+                  hasLiked_rp
                     ? "fill-pink-500 text-pink-500"
                     : "text-white/50 hover:bg-pink-500/10 hover:text-pink-500"
                 }`}
@@ -191,7 +207,7 @@ const PostDetailsCard2 = ({ post }) => {
                 <Heart
                   size={18}
                   className={`transition-colors ${
-                    hasLiked
+                    hasLiked_rp
                       ? "fill-pink-500 text-pink-500"
                       : "text-white/50 group-hover:text-pink-500"
                   }`}
@@ -244,15 +260,37 @@ const PostDetailsCard2 = ({ post }) => {
                 @{post.user.userName}
               </span>
             </div>
-            {/* grok buttons */}
+            {/* grok & moreAction buttons */}
             <div className="flex items-center gap-2">
               <button className="text-white/60 hover:text-white transition">
                 <Sparkles size={18} />
               </button>
 
-              <button className="text-white/60 hover:text-white transition">
-                <MoreHorizontal size={18} />
-              </button>
+              <div ref={moreActionRef} className="relative">
+                <button
+                  onClick={handleMoreOnClick}
+                  className="h-9 w-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition"
+                >
+                  <MoreHorizontal size={16} />
+                </button>
+
+                {showMoreActionButtons && (
+                  <div>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => {
+                        setShowMoreActionButtons(false);
+                      }}
+                    />
+
+                    <div
+                      className="absolute right-0 top-full mt-2 z-50"
+                    >
+                      <MorePostAction post={post} />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -286,18 +324,82 @@ const PostDetailsCard2 = ({ post }) => {
           {/* Engagement */}
           <div className="py-4 border-b border-white/10">
             <div className="flex items-center justify-between text-white/60">
-              <button className="hover:text-white transition">
+              {/* Comment */}
+              <button
+                onClick={() => openCommentComposer(post)}
+                className="hover:text-white transition"
+              >
                 <MessageCircle size={20} />
               </button>
 
-              <button className="hover:text-white transition">
-                <Repeat2 size={20} />
+              {/* Repost */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setShowRepostAction2(!showRepostAction2);
+                  }}
+                  className="flex items-center gap-2 hover:text-white transition-colors"
+                >
+                  <div
+                    className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                      hasReposted_dp
+                        ? " text-green-400"
+                        : "text-white/50 hover:bg-green-500/10 hover:text-green-400"
+                    }`}
+                  >
+                    <Repeat2 size={18} />
+                  </div>
+                  <span className="text-sm">{post.repost.length}</span>
+                </button>
+
+                {showRepostAction2 && (
+                  <div>
+                    {/* Transparent overlay */}
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={(e) => {
+                        setShowRepostAction2(false);
+                      }}
+                    />
+
+                    {/* Menu */}
+                    <div className="absolute z-50">
+                      <RepostActionCard
+                        post={post}
+                        closeRepostCardActions={closeRepostCardActions}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Likes */}
+              <button
+                onClick={() => {
+                  handleLikeOnClick(post.postId);
+                }}
+                className="flex items-center gap-2 hover:text-white transition-colors"
+              >
+                <div
+                  className={`flex items-center justify-center size-8 rounded-full transition-colors ${
+                    hasLiked_dp
+                      ? "fill-pink-500 text-pink-500"
+                      : "text-white/50 hover:bg-pink-500/10 hover:text-pink-500"
+                  }`}
+                >
+                  <Heart
+                    size={18}
+                    className={`transition-colors ${
+                      hasLiked_dp
+                        ? "fill-pink-500 text-pink-500"
+                        : "text-white/50 group-hover:text-pink-500"
+                    }`}
+                  />
+                </div>
+                <span className="text-sm">{post.likes.length}</span>
               </button>
 
-              <button className="hover:text-white transition">
-                <Heart size={20} />
-              </button>
-
+              {/* BookMarks */}
               <button className="hover:text-white transition">
                 <Bookmark size={20} />
               </button>
