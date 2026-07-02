@@ -266,7 +266,7 @@ const PostDetailsCard2 = ({ post }) => {
                   <div
                     className="fixed inset-0 z-40"
                     onClick={(e) => {
-                      setShowRepostAction(false);
+                      setShowRepostAction(!showRepostAction);
                     }}
                   />
 
@@ -447,7 +447,7 @@ const PostDetailsCard2 = ({ post }) => {
                     <div
                       className="fixed inset-0 z-40"
                       onClick={(e) => {
-                        setShowRepostAction2(false);
+                        setShowRepostAction2(!showRepostAction2);
                       }}
                     />
 
