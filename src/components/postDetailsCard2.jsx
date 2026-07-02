@@ -32,6 +32,7 @@ const PostDetailsCard2 = ({ post }) => {
   const [showRepostAction, setShowRepostAction] = useState(false);
   const [showRepostAction2, setShowRepostAction2] = useState(false);
   const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
+  const [media, setMedia] = useState([]);
 
   const moreActionRef = useRef(null);
 
@@ -47,10 +48,47 @@ const PostDetailsCard2 = ({ post }) => {
   }, [posts, post.replyId]);
 
   const composerRef = useRef(null);
+  const textareaRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  const MAX_CHARS = 280;
+  const remaining = MAX_CHARS - reply.length;
+  const isOverLimit = remaining < 0;
+  const isNearLimit = remaining <= 20;
+  const canPost = reply.trim().length > 0 && !isOverLimit;
+
+  const ringSize = 30;
+  const strokeWidth = 2.5;
+  const radius = (ringSize - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const progress = Math.min(Math.max(reply.length / MAX_CHARS, 0), 1);
+  const dashoffset = circumference * (1 - progress);
+  const ringColor = isOverLimit
+    ? "#f4212e"
+    : isNearLimit
+      ? "#ffd400"
+      : "#1d9bf0";
+
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = "auto";
+
+    const maxHeight = 350;
+
+    el.style.height = `${Math.min(el.scrollHeight, maxHeight)}px`;
+    el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
+  }, [reply]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!composerRef.current?.contains(e.target)) {
+      if (composerRef.current?.contains(e.target)) return;
+
+      const hasText = reply.trim() !== "";
+      const hasMedia = media.length > 0;
+
+      if (!hasText && !hasMedia) {
         setIsReplyFocused(false);
       }
     };
@@ -60,7 +98,7 @@ const PostDetailsCard2 = ({ post }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [reply, media]);
 
   const hasLiked_rp = repliedPost?.likes?.includes(user.userId) ?? false; // repliedPost
   const hasLiked_dp = post.likes.includes(user.userId); // detailedPost
@@ -87,6 +125,55 @@ const PostDetailsCard2 = ({ post }) => {
 
   const handleMoreOnClick = () => {
     setShowMoreActionButtons((prev) => !prev);
+  };
+
+  const handleMediaSelect = (e) => {
+    const files = Array.from(e.target.files);
+
+    const selectedMedia = files.map((file) => ({
+      id: crypto.randomUUID(),
+      file,
+      preview: URL.createObjectURL(file),
+    }));
+
+    setMedia((prev) => {
+      const availableSlots = 4 - prev.length;
+
+      if (availableSlots <= 0) {
+        return prev;
+      }
+
+      return [...prev, ...selectedMedia.slice(0, availableSlots)];
+    });
+
+    e.target.value = "";
+  };
+
+  const removeMedia = (id) => {
+    setMedia((prev) => {
+      const item = prev.find((m) => m.id === id);
+
+      if (item) {
+        URL.revokeObjectURL(item.preview);
+      }
+
+      return prev.filter((m) => m.id !== id);
+    });
+  };
+
+  const create_post = usePostStore((state) => state.create_post);
+  const createPostOnClick = () => {
+    if (!reply.trim() && media.length === 0) return;
+
+    create_post({
+      postText: reply,
+      postMedia: media.map((item) => item.preview),
+      replyId: post.postId,
+    });
+
+    setReply("");
+    setMedia([]);
+    setIsReplyFocused(false);
   };
 
   return (
@@ -180,7 +267,7 @@ const PostDetailsCard2 = ({ post }) => {
                   />
 
                   {/* Menu */}
-                  <div className="absolute z-50">
+                  <div className="absolute bottom-full left-2 mb-2 z-50">
                     <RepostActionCard
                       post={repliedPost}
                       closeRepostCardActions={closeRepostCardActions}
@@ -283,9 +370,7 @@ const PostDetailsCard2 = ({ post }) => {
                       }}
                     />
 
-                    <div
-                      className="absolute right-0 top-full mt-2 z-50"
-                    >
+                    <div className="absolute right-0 top-full mt-2 z-50">
                       <MorePostAction post={post} />
                     </div>
                   </div>
@@ -363,7 +448,7 @@ const PostDetailsCard2 = ({ post }) => {
                     />
 
                     {/* Menu */}
-                    <div className="absolute z-50">
+                    <div className="absolute bottom-full left-2 mb-2 z-50">
                       <RepostActionCard
                         post={post}
                         closeRepostCardActions={closeRepostCardActions}
@@ -414,6 +499,7 @@ const PostDetailsCard2 = ({ post }) => {
         {/* Reply Composer */}
 
         <div className="flex gap-3 py-4" ref={composerRef}>
+          {/* Avatar */}
           <div className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center shrink-0">
             <img
               src={user.userIcon}
@@ -432,6 +518,7 @@ const PostDetailsCard2 = ({ post }) => {
               </div>
             )}
 
+            {/* COLLAPSED */}
             {!isReplyFocused ? (
               <div className="flex items-center gap-3">
                 <textarea
@@ -439,42 +526,210 @@ const PostDetailsCard2 = ({ post }) => {
                   onChange={(e) => setReply(e.target.value)}
                   onFocus={() => setIsReplyFocused(true)}
                   placeholder="Post your reply"
-                  rows={1}
-                  className="flex-1 bg-transparent resize-none outline-none placeholder:text-white/40 text-[15px]"
+                  rows={3}
+                  className="
+                    flex-1
+                    bg-transparent
+                    resize-none
+                    outline-none
+                    placeholder:text-white/40
+                    text-[15px]
+                    leading-6
+                  "
                 />
 
-                <button className="px-5 py-2 rounded-full bg-white text-black text-sm font-semibold">
+                <button
+                  onClick={createPostOnClick}
+                  className="
+                    px-5
+                    py-2
+                    rounded-full
+                    bg-white
+                    text-black
+                    text-sm
+                    font-semibold
+                    hover:bg-white/90
+                    transition
+                  "
+                >
                   Reply
                 </button>
               </div>
             ) : (
               <>
+                {/* EXPANDED */}
                 <textarea
+                  ref={textareaRef}
                   value={reply}
                   onChange={(e) => setReply(e.target.value)}
-                  rows={3}
                   placeholder="Post your reply"
-                  className="w-full bg-transparent resize-none outline-none placeholder:text-white/40 text-[15px]"
+                  rows={1}
+                  className="
+                    w-full
+                    bg-transparent
+                    resize-none
+                    outline-none
+                    placeholder:text-white/40
+                    text-[20px]
+                    leading-8
+                  "
                 />
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={handleMediaSelect}
+                />
+                {media.length > 0 && (
+                  <div className="grid gap-1 grid-cols-[repeat(auto-fit,minmax(180px,1fr))] mx-">
+                    {media.map((item) => (
+                      <div
+                        key={item.id}
+                        className="relative overflow-hidden rounded-2xl"
+                      >
+                        <img
+                          src={item.preview}
+                          alt=""
+                          className="w-full object-cover"
+                        />
+
+                        {/* Top Controls */}
+                        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                          {/* Edit */}
+                          <button
+                            className="
+                          h-8
+                          px-3
+                          rounded-full
+                          bg-black/70
+                          backdrop-blur-md
+                          text-white
+                          text-xs
+                          font-medium
+                          hover:bg-black/85
+                          transition
+                        "
+                          >
+                            Edit
+                          </button>
+
+                          {/* Remove */}
+                          <button
+                            onClick={() => removeMedia(item.id)}
+                            className="
+                        size-8
+                        rounded-full
+                        bg-black/70
+                        backdrop-blur-md
+                        text-white
+                        flex
+                        items-center
+                        justify-center
+                        hover:bg-black/85
+                        transition
+                      "
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 <div className="mt-4 flex items-center justify-between">
                   <div className="flex items-center gap-4 text-white/60">
-                    <Image size={18} />
+                    <button
+                      onClick={() => fileInputRef.current.click()}
+                      className="hover:text-white transition"
+                    >
+                      <Image size={18} />
+                    </button>
 
-                    <Gift size={18} />
+                    <button className="hover:text-white transition">
+                      <Gift size={18} />
+                    </button>
 
-                    <Sparkles size={18} />
+                    <button className="hover:text-white transition">
+                      <Sparkles size={18} />
+                    </button>
 
-                    <Smile size={18} />
+                    <button className="hover:text-white transition">
+                      <Smile size={18} />
+                    </button>
 
-                    <MapPin size={18} />
+                    <button className="hover:text-white transition">
+                      <MapPin size={18} />
+                    </button>
 
-                    <Flag size={18} />
+                    <button className="hover:text-white transition">
+                      <Flag size={18} />
+                    </button>
                   </div>
 
-                  <button className="px-5 py-2 rounded-full bg-white text-black text-sm font-semibold">
-                    Reply
-                  </button>
+                  <div className="flex items-center gap-3">
+                    {reply.length > 0 && (
+                      <div className="flex items-center gap-3">
+                        <div className="relative flex items-center justify-center">
+                          <svg
+                            width={ringSize}
+                            height={ringSize}
+                            className="-rotate-90"
+                          >
+                            <circle
+                              cx={ringSize / 2}
+                              cy={ringSize / 2}
+                              r={radius}
+                              fill="none"
+                              stroke="#2f3336"
+                              strokeWidth={strokeWidth}
+                            />
+                            <circle
+                              cx={ringSize / 2}
+                              cy={ringSize / 2}
+                              r={radius}
+                              fill="none"
+                              stroke={ringColor}
+                              strokeWidth={strokeWidth}
+                              strokeDasharray={circumference}
+                              strokeDashoffset={dashoffset}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          {isNearLimit && (
+                            <span
+                              className={`absolute text-[12px] font-medium tabular-nums ${isOverLimit ? "text-[#f4212e]" : "text-[#71767b]"}`}
+                            >
+                              {remaining}
+                            </span>
+                          )}
+                        </div>
+                        {isNearLimit && (
+                          <div className="w-px h-6 bg-[#2f3336]" />
+                        )}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={createPostOnClick}
+                      className="
+                      px-5
+                      py-2
+                      rounded-full
+                      bg-white
+                      text-black
+                      text-sm
+                      font-semibold
+                      hover:bg-white/90
+                      transition
+                    "
+                    >
+                      Reply
+                    </button>
+                  </div>
                 </div>
               </>
             )}

@@ -120,7 +120,7 @@ const PostDetailsCard = ({ post }) => {
 
     create_post({
       postText: reply,
-      postMedia: media,
+      postMedia: media.map((item) => item.preview),
       replyId: post.postId,
     });
 
@@ -265,10 +265,7 @@ const PostDetailsCard = ({ post }) => {
           {/* Repost */}
           <div className="relative">
             <button
-              onClick={
-                
-                handleRepostOnClick
-              }
+              onClick={handleRepostOnClick}
               className="flex items-center gap-2 hover:text-white transition-colors"
             >
               <div
@@ -294,7 +291,7 @@ const PostDetailsCard = ({ post }) => {
                 />
 
                 {/* Menu */}
-                <div className="absolute z-50">
+                <div className="absolute bottom-full left-2 mb-2 z-50">
                   <RepostActionCard
                     post={post}
                     closeRepostCardActions={closeRepostCardActions}
@@ -395,6 +392,7 @@ const PostDetailsCard = ({ post }) => {
               />
 
               <button
+                onClick={createPostOnClick}
                 className="
                     px-5
                     py-2

@@ -34,7 +34,6 @@ const PostCard = ({ post }) => {
   const handlePostOnclick = () => {
     navigate(`/post/${post.postId}`);
   };
-  // console.log(get_post_detail(post.quoteId))
 
   useEffect(() => {
     if (!showRepostAction) return;
@@ -81,11 +80,12 @@ const PostCard = ({ post }) => {
   };
 
   const hasReposted = post.repost.includes(user.userId);
-  const hasLiked = post.likes.includes(user.userId);
+  const hasLiked =  post.likes.includes(user.userId);
+  // const hasLiked = false
+  
 
   const handleLikeOnClick = () => {
     likePost(post.postId);
-    setHasLiked(!hasLiked);
   };
 
   const openCommentComposer = useCommentComposerStore(
@@ -260,7 +260,7 @@ const PostCard = ({ post }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    className="absolute z-50"
+                    className="absolute bottom-full left-2 mb-2 z-50"
                   >
                     <RepostActionCard
                       post={post}
