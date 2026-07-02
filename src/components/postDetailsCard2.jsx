@@ -116,8 +116,12 @@ const PostDetailsCard2 = ({ post }) => {
   const hasReposted_dp = post.repost.includes(user.userId); // detailedPost
 
   const closeRepostCardActions = () => {
-    setShowRepostAction2((prev) => !prev);
+    setShowRepostAction((prev) => !prev);
   };
+
+  const closeRepostCardActions2 = () => {
+    setShowRepostAction2((prev) => !prev);
+  }
 
   const openCommentComposer = useCommentComposerStore(
     (state) => state.openCommentComposer,
@@ -241,7 +245,7 @@ const PostDetailsCard2 = ({ post }) => {
             {/* Repost */}
             <div className="relative">
               <button
-                onClick={() => setShowRepostAction(!showRepostAction)}
+                onClick={() => setShowRepostAction(true)}
                 className="flex items-center gap-2 hover:text-white transition-colors"
               >
                 <div
@@ -421,7 +425,7 @@ const PostDetailsCard2 = ({ post }) => {
               <div className="relative">
                 <button
                   onClick={() => {
-                    setShowRepostAction2(!showRepostAction2);
+                    setShowRepostAction2(true);
                   }}
                   className="flex items-center gap-2 hover:text-white transition-colors"
                 >
@@ -451,7 +455,7 @@ const PostDetailsCard2 = ({ post }) => {
                     <div className="absolute bottom-full left-2 mb-2 z-50">
                       <RepostActionCard
                         post={post}
-                        closeRepostCardActions={closeRepostCardActions}
+                        closeRepostCardActions={closeRepostCardActions2}
                       />
                     </div>
                   </div>
