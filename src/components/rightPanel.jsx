@@ -16,7 +16,7 @@ const RightPanel = () => {
         <div
         className="
             flex gap-3   items-center px-4  w-full 
-            h-11
+            h-13
             rounded-full
             border
             border-white/10
@@ -31,7 +31,7 @@ const RightPanel = () => {
             
           "
       >
-        <Search className="size-4.5 text-white/40" />{" "}
+        <Search className="size-4.5 text-white/40" />
         <input
           onFocus={() => setSearchResultOpen(true)}
           onBlur={() => setSearchResultOpen(false)}
