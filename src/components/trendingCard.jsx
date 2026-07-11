@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 const TrendingCard = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [activeMenu, setActiveMenu] = useState("");
+
   const menuRef = useRef(null);
 
   const trends = [
@@ -35,7 +36,7 @@ const TrendingCard = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-sm overflow-hiddn rounded-2xl border border-white/10 bg-black text-white relative ">
+    <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-black text-white relative ">
       {/* Header */}
       <div className="px-4 py-3 border-b border-white/10">
         <span className="text-sm font-semibold">What's happening</span>
