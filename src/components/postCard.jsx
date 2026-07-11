@@ -99,7 +99,7 @@ const PostCard = ({ post }) => {
   return (
     <div
       onClick={handlePostOnclick}
-      className="w-full max-w-2xl b g-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition"
+      className="w-full max-w-2xl bg-black text-white px-4 py-5 border-b border-white/10 hover:bg-white/2 transition"
     >
       {/* Header */}
       {hasReposted && (
