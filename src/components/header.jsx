@@ -24,7 +24,7 @@ const Header = () => {
             : "text-white/40 hover:text-white/75"
         }`}
       >
-        <span className="relative z-10">Tab A</span>
+        <span className="relative z-10">For You</span>
 
         {activeTab === "A" && (
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-14 rounded-full bg-white" />
@@ -40,7 +40,7 @@ const Header = () => {
             : "text-white/40 hover:text-white/75"
         }`}
       >
-        <span className="relative z-10">Tab B</span>
+        <span className="relative z-10">Following</span>
 
         {activeTab === "B" && (
           <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[4px] w-14 rounded-full bg-white" />
