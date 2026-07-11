@@ -119,7 +119,7 @@ const QuoteComposer = ({ post }) => {
   };
 
   return (
-    <div className="w-full max-w-[600px] h-fit max-h-[90vh] flex flex-col bg-[rgb(20,20,20)] text-white rounded-2xl bordr border-[#2f3336] shadow-2xl overflow-hidden">
+    <div className="w-full max-w-[600px] h-fit max-h-[90vh] flex flex-col bg-[rgb(20,20,20)] text-white rounded-2xl border-[#2f3336] shadow-2xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3">
         <button
