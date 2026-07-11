@@ -25,8 +25,11 @@ const PostPage = () => {
   const getComments = async () => {
 
     const response = await get_post_comment(postId);
+    // console.log(response);  
     setComments(response);
   };
+
+  // console.log(comments);
 
   const getPost = async () => {
     const response = await get_post_detail(postId);
@@ -52,9 +55,9 @@ const PostPage = () => {
         
         {post?.replyId && <PostDetailsCard2 post={post} /> || post && <PostDetailsCard post={post} /> }
 
-        {comments?.map((comment,  i) => {
+        {comments.map((comment) => {
 
-          return <PostCard key={i} post={comment}/>
+          return <PostCard key={comment.postId} post={comment}/>
         })}
       </div>
     </div>
