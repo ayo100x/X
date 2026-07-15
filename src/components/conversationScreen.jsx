@@ -134,7 +134,7 @@ const ConversationScreen = () => {
   return (
     <div className="bg-black text-white h-full flex flex-col w-full relative ">
       {/* header */}
-      <div className="bg-black/60 backdrop-blur-md absolute top-0 left-0 right-0">
+      <div className="bg-black/60 absolute top-0 left-0 right-0">
         <div className="flex items-center m-3 justify-between ">
           {/* avatar & Name*/}
           <div className="flex items-center gap-3">
@@ -206,7 +206,7 @@ const ConversationScreen = () => {
         </div>
       </div>
 
-      <div className=" absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-md ">
+      <div className=" absolute bottom-0 left-0 right-0 bg-black/60">
         <ConversationInput />
       </div>
     </div>
