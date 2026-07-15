@@ -2,10 +2,10 @@ const MessageBubble = ({ message, currentUser }) => {
   const isCurrentUser = message.user.userId === currentUser;
   return (
     <div
-      className={`flex m-3 ${isCurrentUser ? "justify-end" : "justify-start"}`}
+      className={`flex m-1 ${isCurrentUser ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`max-w-[70%] rounded-full px-4 py-3 ${
+        className={`max-w-[70%] rounded-full px-4 py-2 ${
           isCurrentUser ? "bg-[#1d9bf0]" : "bg-white/10"
         }`}
       >
