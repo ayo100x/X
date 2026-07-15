@@ -182,7 +182,7 @@ const CommentComposer = ({ post }) => {
           </div>
         </div>
 
-        {/* Row 2: Your avatar + textarea side by side */}
+        {/* Row 2: avatar + textarea side by side */}
         <div className="flex gap-3 items-start">
           <div className="flex-shrink-0">
             <img
@@ -198,7 +198,7 @@ const CommentComposer = ({ post }) => {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Post your reply"
-              className="w-full bg-transparent resize-none outline-none text-[20px] leading-7 placeholder:text-[#71767b] min-h-[72px] max-h-[350px]  caret-[#1d9bf0]"
+              className="w-full bg-transparent resize-none outline-none text-[20px] leading-7 placeholder:text-[#71767b] min-h-18 max-h-87.5  caret-[#1d9bf0]"
               rows={1}
             />
           </div>
