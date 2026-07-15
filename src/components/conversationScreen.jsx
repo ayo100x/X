@@ -164,9 +164,9 @@ const ConversationScreen = () => {
       </div>
 
       {/* body */}
-      <div className="overflow-y-auto custom-scrollbar">
+      <div className=" overflow-y-auto custom-scrollbar">
         {/* user info & date joined */}
-        <div className="mt-20 gap-3 items-center justify-center flex flex-col">
+        <div className="gap-3 mt-30 items-center justify-center flex flex-col">
           {/* user avatar */}
           <img
             src="https://i.pravatar.cc/150?img=48"
@@ -194,7 +194,7 @@ const ConversationScreen = () => {
           <span className="text-white/30 mt-3"> Jul 28, 2023 </span>
         </div>
         {/* Message List (conversations) */}
-        <div className="w-full bg-transparent flex-1 mt-3 items-center ">
+        <div className="w-full bg-transparent flex-1 mt-3 px-3 items-center ">
           {messages.map((message) => (
             <MessageBubble
               key={message.messageId}
