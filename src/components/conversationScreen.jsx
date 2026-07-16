@@ -148,15 +148,15 @@ const ConversationScreen = () => {
 
           {/* buttons */}
           <div className="flex gap-2">
-            <button className="flex items-center justify-center rounded-full bg-white/30 size-14">
+            <button className="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 duration-200 transition-colors cursor-pointer size-14">
               <Phone size={20} className="text-white" />
             </button>
 
-            <button className="flex items-center justify-center rounded-full bg-white/30 size-14">
+            <button className="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 duration-200 transition-colors cursor-pointer size-14">
               <Video size={20} className="text-white" />
             </button>
 
-            <button className="flex items-center justify-center rounded-full bg-white/30 size-14">
+            <button className="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 duration-200 transition-colors cursor-pointer size-14">
               <MoreHorizontal size={20} className="text-white" />
             </button>
           </div>
