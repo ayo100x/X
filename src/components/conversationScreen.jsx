@@ -4,6 +4,7 @@ import ConversationInput from "./conversationInput";
 import { useState } from "react";
 import MessageBubble from "./messageBubble";
 import { usePostStore } from "../stores/post.store";
+import { useUserChatProfileStore } from "../stores/useUserChatProfileStore";
 
 const ConversationScreen = () => {
   const [messages, setMessages] = useState([
@@ -131,6 +132,12 @@ const ConversationScreen = () => {
 
   const user = usePostStore((state) => state.user);
 
+  const setUserChatProfile = useUserChatProfileStore((state) => state.setUserChatProfile)
+
+  const handleOpenUserChatProfile = () => {
+      setUserChatProfile(true);
+  }
+
   return (
     <div className="bg-black text-white h-full flex flex-col w-full relative ">
       {/* header */}
@@ -156,7 +163,9 @@ const ConversationScreen = () => {
               <Video size={20} className="text-white" />
             </button>
 
-            <button className="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 duration-200 transition-colors cursor-pointer size-14">
+            <button 
+              onClick={handleOpenUserChatProfile}
+              className="flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 duration-200 transition-colors cursor-pointer size-14">
               <MoreHorizontal size={20} className="text-white" />
             </button>
           </div>
