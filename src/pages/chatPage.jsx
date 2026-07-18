@@ -21,6 +21,8 @@ import {
   Video,
 } from "lucide-react";
 import ChatProfileActions from "../components/chatProfileActions";
+import { useNewMessageModalStore } from "../stores/useNewMessageModalStore";
+import NewMessageModal from "../components/newMessageModal";
 
 const ChatPage = () => {
   const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
@@ -30,6 +32,14 @@ const ChatPage = () => {
   const closeUserChatProfile = useUserChatProfileStore(
     (state) => state.closeUserChatProfile,
   );
+
+  const showNewMessageModal = useNewMessageModalStore(
+    (state) => state.showNewMessageModal
+  )
+
+  const closeNewMessageModal = useNewMessageModalStore(
+    (state) => state.closeNewMessageModal
+  )
 
   const handleBackOnclick = () => {
     console.log("clicked");
@@ -42,7 +52,8 @@ const ChatPage = () => {
 
   return (
     <div className="flex h-screen relative ">
-      <div className="w-[500px] ">
+      
+      <div className="w-125 ">
         <ContactList />
       </div>
 
@@ -50,6 +61,22 @@ const ChatPage = () => {
         <NewChatScreen />
         {/* <ConversationScreen /> */}
       </div>
+
+      {showNewMessageModal && (
+        <div>
+          {/* transparent overlay */}
+          <div
+            onClick={closeNewMessageModal}
+            className=" bg-transparent overflow-hidden h-full fixed inset-0 z-40"
+          />
+
+          {/* NewMessageModal */}
+
+          <div className="absolute inset-0 z-50 flex justify-center mt-5">
+            <NewMessageModal />
+          </div>
+        </div>
+      )}
 
       {userChatProfile && (
         <div className="absolute bg-transparent inset-0 flex justify-center">
