@@ -43,14 +43,6 @@ function App() {
 
   const isChatPage = location.pathname.startsWith("/chatPage");
 
-  const showNewMessageModal = useNewMessageModalStore(
-    (state) => state.showNewMessageModal,
-  );
-
-  const closeNewMessageModal = useNewMessageModalStore(
-    (state) => state.closeNewMessageModal,
-  );
-
   return (
     <div className="bg-black relative">
       <div
@@ -99,24 +91,6 @@ function App() {
         </div>
       )}
 
-      {showNewMessageModal && (
-        <div>
-          {/* transparent overlay */}
-          <div
-            onClick={closeNewMessageModal}
-            className=" bg-transparent overflow-hidden h-full fixed inset-0 z-40"
-          />
-
-          {/* NewMessageModal */}
-
-          <div
-            className="absolute inset-0 z-50 flex justify-center"
-          >
-             <NewMessageModal/>
-          </div>
-
-        </div>
-      )}
     </div>
   );
 }
