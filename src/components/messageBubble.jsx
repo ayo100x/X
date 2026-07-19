@@ -1,5 +1,5 @@
-const MessageBubble = ({ message, currentUser }) => {
-  const isCurrentUser = message.user.userId === currentUser;
+const MessageBubble = ({ message }) => {
+  const isCurrentUser = message.senderId === 0;
   return (
     <div
       className={`flex m-1 ${isCurrentUser ? "justify-end" : "justify-start"}`}
