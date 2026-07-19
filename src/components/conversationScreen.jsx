@@ -6,136 +6,14 @@ import MessageBubble from "./messageBubble";
 import { usePostStore } from "../stores/post.store";
 import { useUserChatProfileStore } from "../stores/useUserChatProfileStore";
 
-const ConversationScreen = () => {
-  const [messages, setMessages] = useState([
-    {
-      messageId: 1,
-      text: "Had a long day",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 2,
-      text: "You free later?",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 3,
-      text: "Yeah, what's up?",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 4,
-      text: "Just wanted to check in.",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 5,
-      text: "Sounds good 😂",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 6,
-      text: "I'm almost home.",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 7,
-      text: "Take your time.",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 8,
-      text: "Did you eat already?",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 9,
-      text: "Not yet.",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 10,
-      text: "Let's order something.",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 11,
-      text: "I'm down.",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 12,
-      text: "Pizza or burgers?",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 13,
-      text: "Pizza 🍕",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-    {
-      messageId: 14,
-      text: "Good choice.",
-      user: {
-        userId: 2,
-        userName: "Sarah",
-      },
-    },
-    {
-      messageId: 15,
-      text: "See you soon.",
-      user: {
-        userId: 1,
-        userName: "John",
-      },
-    },
-  ]);
+const ConversationScreen = ({activeConversation}) => {
+  
 
   const user = usePostStore((state) => state.user);
-
   const setUserChatProfile = useUserChatProfileStore((state) => state.setUserChatProfile)
 
   const handleOpenUserChatProfile = () => {
-      setUserChatProfile(true);
+     setUserChatProfile(true);
   }
 
   return (
@@ -146,11 +24,11 @@ const ConversationScreen = () => {
           {/* avatar & Name*/}
           <div className="flex items-center gap-3">
             <img
-              src="https://i.pravatar.cc/150?img=48"
+              src={activeConversation.userAvatar}
               className="object-cover rounded-full w-15 h-15"
             />
 
-            <span className="text-[15px] font-medium text-white">John</span>
+            <span className="text-[15px] font-medium text-white">{activeConversation.name}</span>
           </div>
 
           {/* buttons */}
@@ -178,14 +56,14 @@ const ConversationScreen = () => {
         <div className="gap-3 mt-30 items-center justify-center flex flex-col">
           {/* user avatar */}
           <img
-            src="https://i.pravatar.cc/150?img=48"
+            src={activeConversation.userAvatar}
             className="object-cover rounded-full w-15 h-15"
           />
 
           {/* user info */}
           <div className="flex flex-col items-center justify-center">
-            <span className="text-white font-semibold text-[25px]"> John </span>
-            <span className="text-white/30">@johndoe</span>
+            <span className="text-white font-semibold text-[25px]"> {activeConversation.name} </span>
+            <span className="text-white/30">@{activeConversation.userName}</span>
             <div className="flex gap-1">
               <span className="text-white font-semibold text-[18px]">275</span>
               <span className="text-white/30">Followers</span>
@@ -204,14 +82,13 @@ const ConversationScreen = () => {
         </div>
         {/* Message List (conversations) */}
         <div className="w-full bg-transparent flex-1 mt-3 px-3 items-center ">
-          {messages.map((message) => (
+          {activeConversation.messages.map((message) => (
             <MessageBubble
               key={message.messageId}
               message={message}
-              currentUser={user.userId}
+              // currentUser={message.senderId}
             />
           ))}
-          {/* <MessageBubble /> */}
         </div>
       </div>
 
