@@ -1,5 +1,6 @@
 import { ArrowUp, AudioLines, ImagePlay, Plus, Sticker, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useConversationStore } from "../stores/use.conversation.store";
 
 const ConversationInput = () => {
   const [text, setText] = useState("");
@@ -41,6 +42,15 @@ const ConversationInput = () => {
     setMedia(null);
     fileInputRef.current.value = "";
   };
+  
+  const sendText = useConversationStore((state) => state.sendText)
+
+  const handleSend = () => {
+    if(!text.trim()) return;
+    sendText(text);
+
+    setText("");
+  }
 
   return (
     <div className="bg-transparent w-full flex items-end gap-2 pb-4 px-4">
@@ -86,7 +96,10 @@ const ConversationInput = () => {
               {!text && !media ? (
                 <AudioLines size={20} className="text-white" />
               ) : (
-                <ArrowUp size={20} className="text-white" />
+                <ArrowUp 
+                  onClick={handleSend}
+                  size={20} 
+                  className="text-white" />
               )}
             </button>
           </div>
