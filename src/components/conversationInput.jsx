@@ -5,6 +5,7 @@ import { useConversationStore } from "../stores/use.conversation.store";
 const ConversationInput = () => {
   const [text, setText] = useState("");
   const [media, setMedia] = useState(null);
+  // console.log(media)
   const textareaRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -42,18 +43,25 @@ const ConversationInput = () => {
     setMedia(null);
     fileInputRef.current.value = "";
   };
+
   
-  const sendText = useConversationStore((state) => state.sendText)
+  const {sendMessage} = useConversationStore();
 
   const handleSend = () => {
-    if(!text.trim()) return;
-    sendText(text);
+    console.log("called");  // this is not logging?
+
+    if (!text.trim() && !media) return;
+
+    sendMessage({
+      text, media: media?.mediaURL
+    })
 
     setText("");
-  }
+    setMedia(null);
+  };
 
   return (
-    <div className="bg-transparent w-full flex items-end gap-2 pb-4 px-4">
+    <div className=" w-full flex items-end gap-2 pb-4 px-4">
       <div className="flex gap-2">
         {/* + button */}
         <button
@@ -91,15 +99,16 @@ const ConversationInput = () => {
             />
 
             <button
+              onClick={handleSend}
               className={`ml-2 flex items-center justify-center size-8 rounded-full duration-200 shrink-0 ${!text && !media ? "bg-white/20 hover:hover:bg-white/30" : "bg-blue-400 hover:hover:bg-blue-500"} `}
             >
               {!text && !media ? (
                 <AudioLines size={20} className="text-white" />
               ) : (
-                <ArrowUp 
-                  onClick={handleSend}
-                  size={20} 
-                  className="text-white" />
+                <ArrowUp
+                  size={20}
+                  className="text-white"
+                />
               )}
             </button>
           </div>
@@ -138,6 +147,7 @@ const ConversationInput = () => {
               />
 
               <button
+                onClick={handleSend}
                 className={`ml-2 flex items-center justify-center size-8 rounded-full duration-200 shrink-0 ${!text && !media ? "bg-white/20 hover:hover:bg-white/30" : "bg-blue-400 hover:hover:bg-blue-500"} `}
               >
                 {!text && !media ? (
@@ -149,7 +159,6 @@ const ConversationInput = () => {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
