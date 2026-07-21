@@ -17,9 +17,11 @@ const ConversationScreen = ({activeConversation}) => {
   }
 
   return (
-    <div className="bg-black text-white h-full flex flex-col w-full relative ">
+    <div className="bg-black text-white h-screen flex flex-col w-full relative ">
       {/* header */}
-      <div className="bg-black/60 absolute top-0 left-0 right-0">
+      <div 
+        onClick={handleOpenUserChatProfile}
+        className="bg-linear-to-b from-black via-black/90 to-transparent absolute top-0 left-0 right-0">
         <div className="flex items-center m-3 justify-between ">
           {/* avatar & Name*/}
           <div className="flex items-center gap-3">
@@ -80,19 +82,20 @@ const ConversationScreen = ({activeConversation}) => {
 
           <span className="text-white/30 mt-3"> Jul 28, 2023 </span>
         </div>
+
         {/* Message List (conversations) */}
         <div className="w-full bg-transparent flex-1 mt-3 px-3 items-center ">
           {activeConversation.messages.map((message) => (
             <MessageBubble
               key={message.messageId}
               message={message}
-              // currentUser={message.senderId}
             />
           ))}
+          <div className="h-20"/>
         </div>
       </div>
 
-      <div className=" absolute bottom-0 left-0 right-0 bg-black/60">
+      <div className=" absolute bottom-0 left-0 right-0 bg-linear-to-t from-black via-black/95 via-30% to-transparent">
         <ConversationInput />
       </div>
     </div>
