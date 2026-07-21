@@ -44,20 +44,32 @@ const ConversationInput = () => {
     fileInputRef.current.value = "";
   };
 
-  
-  const {sendMessage} = useConversationStore();
+  const { sendMessage } = useConversationStore();
 
   const handleSend = () => {
-    console.log("called");  // this is not logging?
+    console.log("called"); // this is not logging?
 
     if (!text.trim() && !media) return;
 
     sendMessage({
-      text, media: media?.mediaURL
-    })
+      text,
+      media: media?.mediaURL,
+    });
 
     setText("");
     setMedia(null);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && e.shiftKey) return;
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (!text.trim() && !media) return;
+
+      handleSend();
+    }
   };
 
   return (
@@ -93,6 +105,7 @@ const ConversationInput = () => {
               ref={textareaRef}
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={handleKeyDown}
               rows={1}
               placeholder="Message"
               className="flex-1 bg-transparent resize-none outline-none text-white placeholder:text-white/70 leading-6 max-h-50 px-2 py-1 custom-scrollbar"
@@ -105,10 +118,7 @@ const ConversationInput = () => {
               {!text && !media ? (
                 <AudioLines size={20} className="text-white" />
               ) : (
-                <ArrowUp
-                  size={20}
-                  className="text-white"
-                />
+                <ArrowUp size={20} className="text-white" />
               )}
             </button>
           </div>
@@ -140,6 +150,7 @@ const ConversationInput = () => {
               <textarea
                 ref={textareaRef}
                 value={text}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => setText(e.target.value)}
                 rows={1}
                 placeholder="Message"
