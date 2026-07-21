@@ -53,11 +53,13 @@ const ConversationInput = () => {
 
     sendMessage({
       text,
-      media: media?.mediaURL,
+      media: media ? URL.createObjectURL(media.file) : null
     });
 
+    handleRemoveMediaOnClick();
     setText("");
     setMedia(null);
+    
   };
 
   const handleKeyDown = (e) => {
