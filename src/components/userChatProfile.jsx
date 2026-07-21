@@ -3,29 +3,26 @@ import ChatProfileActions from "./chatProfileActions";
 import { useState } from "react";
 import { useUserChatProfileStore } from "../stores/useUserChatProfileStore";
 
+
 const UserChatProfile = ({ activeConversation }) => {
   const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
-  ;
+  
+  const closeUserChatProfile = useUserChatProfileStore((state) => state.closeUserChatProfile);
 
-  const closeUserChatProfile = useUserChatProfileStore(
-    (state) => state.closeUserChatProfile,
-  );
-
-  const handleBackOnclick = () => {
-    closeUserChatProfile();
-  };
 
   const handleMoreOnClick = () => {
-    setShowMoreActionButtons(!showMoreActionButtons);
-  };
+    setShowMoreActionButtons(true);
+  }
 
   return (
-    <div className="absolute bg-transparent inset-0 flex justify-center">
+    <div 
+      onClick={closeUserChatProfile}
+      className="absolute bg-transparent inset-0 flex justify-center ">
       <div className="w-full h-fit max-w-150 max-h-[90vh] flex flex-col bg-[rgb(20,20,20)] text-white rounded-2xl shadow-2xl overflow-hidden custom-scrollbar mt-10 ">
         {/* Header */}
         <div className="flex justify-between m-4">
           <button
-            onClick={handleBackOnclick}
+            onClick={closeUserChatProfile}
             className="flex items-center justify-center rounded-full  hover:bg-white/10 duration-200 transition-colors cursor-pointer size-11"
           >
             <ArrowLeft size={20} />
