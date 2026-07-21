@@ -56,7 +56,7 @@ const ConversationList = () => {
       {/* Chats */}
       <div className="overflow-y-auto custom-scrollbar">
         {conversations.map((conversation) => (
-          <ConversationCard key={conversation.userId} conversation={conversation} />
+          <ConversationCard key={conversation?.userId} conversation={conversation} />
         ))}
       </div>
     </div>
