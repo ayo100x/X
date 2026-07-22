@@ -2,62 +2,14 @@ import { Search, User, Users, X } from "lucide-react";
 import { useNewMessageModalStore } from "../stores/useNewMessageModalStore";
 import UserCard from "./userCard";
 import { useState } from "react";
+import { useContactStore } from "../stores/use.contact.store";
 
 const NewMessageModal = () => {
   const closeNewMessageModal = useNewMessageModalStore(
     (state) => state.closeNewMessageModal,
   );
 
-  const [users, setUsers] = useState([
-    {
-      userId: 1,
-      name: "John Cena",
-      userName: "johncena",
-      userIcon: "https://i.pravatar.cc/150?img=48",
-    },
-    {
-      userId: 2,
-      name: "Sarah Williams",
-      userName: "sarahw",
-      userIcon: "https://i.pravatar.cc/150?img=32",
-    },
-    {
-      userId: 3,
-      name: "Mike Williams",
-      userName: "mikew",
-      userIcon: "https://i.pravatar.cc/150?img=34",
-    },
-    {
-      userId: 4,
-      name: "Dan Oliver",
-      userName: "doliver",
-      userIcon: "https://i.pravatar.cc/150?img=39",
-    },
-    {
-      userId: 1,
-      name: "John Cena",
-      userName: "johncena",
-      userIcon: "https://i.pravatar.cc/150?img=48",
-    },
-    {
-      userId: 2,
-      name: "Sarah Williams",
-      userName: "sarahw",
-      userIcon: "https://i.pravatar.cc/150?img=32",
-    },
-    {
-      userId: 3,
-      name: "Mike Williams",
-      userName: "mikew",
-      userIcon: "https://i.pravatar.cc/150?img=34",
-    },
-    {
-      userId: 4,
-      name: "Dan Oliver",
-      userName: "doliver",
-      userIcon: "https://i.pravatar.cc/150?img=39",
-    },
-  ])
+  const contacts = useContactStore((state) => state.contacts);
 
 
   return (
@@ -101,7 +53,7 @@ const NewMessageModal = () => {
       {/* List of users to start new chat with */}
 
       <div className="mt-4 mx-5 overflow-y-auto custom-scrollbar">
-        {users.map((user) => <UserCard key={user.userId} user={user}/>)}
+        {contacts.map((contact) => <UserCard key={contact.contactId} contact={contact}/>)}
       </div>
     </div>
   );
