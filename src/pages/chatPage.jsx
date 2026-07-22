@@ -41,7 +41,6 @@ const ChatPage = () => {
     (state) => state.closeNewMessageModal,
   );
 
-
   
 
   const conversations = useConversationStore((state) => state.conversations);
@@ -81,7 +80,7 @@ const ChatPage = () => {
           </div>
         </div>
       )}
-
+      
       {userChatProfile && (
        <UserChatProfile activeConversation={activeConversation}/>
       )}
