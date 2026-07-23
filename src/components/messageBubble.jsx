@@ -1,7 +1,16 @@
 import { HeartPlus, MoreHorizontal } from "lucide-react";
+import { useState } from "react";
+import ChatContextMenu from "./ChatContextMenu";
+import { useConversationStore } from "../stores/use.conversation.store";
 
 const MessageBubble = ({ message }) => {
   const isCurrentUser = message.senderId === 0;
+  const { openContextMenuId, toggleContextMenu, closeContextMenu } =
+    useConversationStore();
+  const isMenuOpen = openContextMenuId === message.messageId;
+  const handleChatContextOnClick = () => {
+    toggleContextMenu(message.messageId);
+  };
 
   return (
     <div
@@ -9,12 +18,25 @@ const MessageBubble = ({ message }) => {
         isCurrentUser ? "justify-end pr-3" : "justify-start pl-3"
       }`}
     >
-      
       {isCurrentUser && (
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-          <button className="size-8 rounded-full flex items-center justify-center hover:bg-white/10">
-            <MoreHorizontal size={17} className="text-white/70" />
-          </button>
+        <div
+          className={`flex items-center gap-1 transition-opacity duration-150
+            ${isMenuOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
+            `}
+        >
+          <div className="relative">
+            <button
+              onClick={handleChatContextOnClick}
+              className="size-8 rounded-full flex items-center justify-center hover:bg-white/10"
+            >
+              <MoreHorizontal size={17} className="text-white/70" />
+            </button>
+            {openContextMenuId === message.messageId && (
+              <div className="absolute right-0 top-6 mt-2 z-50">
+                <ChatContextMenu />
+              </div>
+            )}
+          </div>
 
           <button className="size-8 rounded-full flex items-center justify-center hover:bg-white/10">
             <HeartPlus size={17} className="text-white/70" />
@@ -46,14 +68,28 @@ const MessageBubble = ({ message }) => {
       </div>
 
       {!isCurrentUser && (
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+        <div
+          className={`flex items-center gap-1 transition-opacity duration-150
+            ${isMenuOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100"}
+            `}
+        >
           <button className="size-8 rounded-full flex items-center justify-center hover:bg-white/10">
             <HeartPlus size={17} className="text-white/70" />
           </button>
 
-          <button className="size-8 rounded-full flex items-center justify-center hover:bg-white/10">
-            <MoreHorizontal size={17} className="text-white/70" />
-          </button>
+          <div className="relative">
+            <button
+              onClick={handleChatContextOnClick}
+              className="size-8 rounded-full flex items-center justify-center hover:bg-white/10"
+            >
+              <MoreHorizontal size={17} className="text-white/70" />
+            </button>
+            {openContextMenuId === message.messageId && (
+              <div className="absolute left-0 top-6 mt-2 z-50">
+                <ChatContextMenu />
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
