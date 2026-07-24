@@ -5,6 +5,8 @@ import { useState } from "react";
 import MessageBubble from "./messageBubble";
 import { usePostStore } from "../stores/post.store";
 import { useUserChatProfileStore } from "../stores/useUserChatProfileStore";
+import { useConversationStore } from "../stores/use.conversation.store";
+import MessageTile from "./messageTile";
 
 const ConversationScreen = ({activeConversation}) => {
   
@@ -84,13 +86,8 @@ const ConversationScreen = ({activeConversation}) => {
         </div>
 
         {/* Message List (conversations) */}
-        <div className="w-full bg-transparent flex-1 mt-3 px-3 items-center ">
-          {activeConversation.messages.map((message) => (
-            <MessageBubble
-              key={message.messageId}
-              message={message}
-            />
-          ))}
+        <div  className="w-full bg-transparent flex-1 mt-3 px-3 items-center ">
+          <MessageTile activeConversation={activeConversation}/>
           <div className="h-20"/>
         </div>
       </div>
