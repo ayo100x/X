@@ -89,7 +89,7 @@ const MessageBubble = ({
             </button>
             {showContextMenu && (
               <div className="absolute">
-                <ChatContextMenu />
+                <ChatContextMenu messageId={message.id} />
               </div>
             )}
           </div>
