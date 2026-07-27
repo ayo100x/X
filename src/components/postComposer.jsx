@@ -72,6 +72,18 @@ const PostComposer = () => {
 
   const create_post = usePostStore((state) => state.create_post);
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && e.shiftKey) return;
+
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      if (!text.trim() && !media) return;
+
+      createPostOnClick();
+    }
+  };
+
   const createPostOnClick = () => {
     if (!text.trim() && media.length === 0) return;
 
@@ -121,6 +133,7 @@ const PostComposer = () => {
               ref={textareaRef}
               value={text}
               onChange={handleInput}
+              onKeyDown={handleKeyDown}
               placeholder="What's happening?"
               rows={2}
               className="w-full min-h-10 overflow-y-auto  bg-transparent outline-none resize-none  focus:border-white/60 py-2 text-sm placeholder:text-white/40 overflow-hidden leading-5"
