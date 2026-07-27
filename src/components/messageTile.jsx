@@ -19,7 +19,7 @@ const MessageTile = ({ activeConversation }) => {
           <div key={message.messageId} onMouseEnter={() =>{setHoveredMessageId(message.messageId)}} onMouseLeave={() =>{setHoveredMessageId(null)}}> 
             <MessageBubble message={message} isCurrentUser={isCurrentUser} setOpenedContextMenuId={setOpenedContextMenuId} hoveredMessageId={hoveredMessageId} openedContextMenuId={openedContextMenuId}  />
           </div>
-          
+
         );
       })}
     </div>
