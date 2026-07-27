@@ -1,6 +1,8 @@
 import { CopyPlus, Flag, Forward, Info, MessageCircle, Trash2 } from "lucide-react";
+import { useConversationStore } from "../stores/use.conversation.store";
 
-const ChatContextMenu = ({isCurrentUser}) => {
+const ChatContextMenu = ({messageId,}) => {
+  const {deleteMessageForMe, conversations, activeConversationId} = useConversationStore();
   const actions = [
     {
       icon: MessageCircle,
@@ -30,9 +32,10 @@ const ChatContextMenu = ({isCurrentUser}) => {
     {
       icon: Trash2,
       label: "Delete for me",
-      onClick: () => {},
+      onClick: () => {deleteMessageForMe(messageId)},
     },
   ];
+
 
   return (
     <div className="w-50 overflow-hidden rounded-t-2xl rounded-b-2xl border border-white/10 bg-[rgb(20,20,20)]  shadow-2xl">
