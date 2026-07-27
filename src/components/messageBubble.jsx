@@ -13,7 +13,7 @@ const MessageBubble = ({
     hoveredMessageId === message.messageId ||
     openedContextMenuId === message.messageId;
   const showContextMenu = openedContextMenuId === message.messageId;
-
+ 
   const toggleMoreButton = () => {
     if (showContextMenu) {
       setOpenedContextMenuId(null)
@@ -42,7 +42,7 @@ const MessageBubble = ({
             </button>
             {showContextMenu && (
               <div className="absolute">
-                <ChatContextMenu />
+                <ChatContextMenu messageId={message.messageId}/>
               </div>
             )}
           </div>
@@ -89,7 +89,7 @@ const MessageBubble = ({
             </button>
             {showContextMenu && (
               <div className="absolute">
-                <ChatContextMenu messageId={message.id} />
+                <ChatContextMenu messageId={message.messageId} />
               </div>
             )}
           </div>
