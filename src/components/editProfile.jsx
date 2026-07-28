@@ -92,7 +92,7 @@ const EditProfile = ({ user, setShowEditProfile }) => {
               rows={1}
               defaultValue=""
               value={name}
-              onClick={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="mt-1 w-full resize-none overflow-hidden bg-transparent text-[17px] text-white outline-none"
             />
           </div>
