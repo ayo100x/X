@@ -5,7 +5,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 
-const ProfileHero = ({user}) => {
+const ProfileHero = ({ user, setShowEditProfile }) => {
   return (
     <div>
       {/* Cover */}
@@ -31,7 +31,13 @@ const ProfileHero = ({user}) => {
       <div className="px-5 pb-5">
         {/* Buttons */}
         <div className="flex justify-end gap-3 mt-3">
-          <button className="h-10 px-6 rounded-full font-semibold border border-white/20 hover:bg-white/10  transition">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowEditProfile(true);
+            }}
+            className="h-10 px-6 rounded-full font-semibold border border-white/20 hover:bg-white/10  transition"
+          >
             Edit profile
           </button>
         </div>
@@ -50,9 +56,7 @@ const ProfileHero = ({user}) => {
               Building beautiful software experiences.
             </span>
 
-            <span className="text-white text-[15px]">
-              {user.about}
-            </span>
+            <span className="text-white text-[15px]">{user.about}</span>
           </div>
 
           {/* Meta */}
