@@ -1,4 +1,11 @@
-import { X, Sparkles, Camera, ChevronRight, Image, ImagePlus } from "lucide-react";
+import {
+  X,
+  Sparkles,
+  Camera,
+  ChevronRight,
+  Image,
+  ImagePlus,
+} from "lucide-react";
 import { useState } from "react";
 
 const EditProfile = ({ user, setShowEditProfile }) => {
@@ -14,6 +21,11 @@ const EditProfile = ({ user, setShowEditProfile }) => {
       setBio(e.target.value);
     }
   };
+
+  // incomplete save function
+  const handleSave = () => {
+    setShowEditProfile(false)
+  }
 
   return (
     <div className="w-full max-w-170 h-fit max-h-[90vh] flex flex-col bg-[rgb(20,20,20)] text-white rounded-2xl border-[#2f3336] shadow-2xl overflow-hidden m-3 ">
@@ -32,7 +44,10 @@ const EditProfile = ({ user, setShowEditProfile }) => {
             Edit Profile
           </span>
         </div>
-        <button className="bg-white text-black flex justify-center items-center rounded-full w-20 font-semibold py-1.5">
+        <button
+          onClick={handleSave}
+          className="bg-white text-black flex justify-center items-center rounded-full w-20 font-semibold py-1.5"
+        >
           <span>Save</span>
         </button>
       </div>
