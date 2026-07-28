@@ -1,4 +1,4 @@
-import { X, Sparkles, ChevronRight, Image } from "lucide-react";
+import { X, Sparkles, Camera, ChevronRight, Image, ImagePlus } from "lucide-react";
 import { useState } from "react";
 
 const EditProfile = ({ user, setShowEditProfile }) => {
@@ -38,7 +38,7 @@ const EditProfile = ({ user, setShowEditProfile }) => {
       </div>
       {/* Body */}
       <div className="overflow-y-auto custom-scrollbar">
-        {/* cover photo and avatar */}
+        {/* Cover Photo */}
         <div className="relative h-52">
           <img
             src={user.coverPhoto}
@@ -46,14 +46,40 @@ const EditProfile = ({ user, setShowEditProfile }) => {
             className="w-full h-full object-cover"
           />
 
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-black/35" />
+
+          {/* Cover Edit */}
+          <div className="absolute inset-0 flex items-center justify-center gap-4">
+            <button className="size-12 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/75 transition flex items-center justify-center">
+              <Camera size={22} className="text-white" />
+            </button>
+
+            <button className="size-12 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/75 transition flex items-center justify-center">
+              <ImagePlus size={22} className="text-white" />
+            </button>
+
+            <button className="size-12 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/75 transition flex items-center justify-center">
+              <X size={22} className="text-white" />
+            </button>
+          </div>
+
           {/* Avatar */}
           <div className="absolute -bottom-25 left-5">
-            <div className="size-36 rounded-full overflow-hidden border-4 border-black">
+            <div className="relative size-36 rounded-full overflow-hidden border-4 border-black">
               <img
                 src={user.userIcon}
                 alt=""
                 className="w-full h-full object-cover"
               />
+
+              {/* Avatar Overlay */}
+              <div className="absolute inset-0 bg-black/35" />
+
+              {/* Avatar Edit */}
+              <button className="absolute inset-0 m-auto size-12 rounded-full bg-black/60 backdrop-blur-md hover:bg-black/75 transition flex items-center justify-center">
+                <Camera size={22} className="text-white" />
+              </button>
             </div>
           </div>
         </div>
