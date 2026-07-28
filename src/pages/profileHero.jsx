@@ -37,7 +37,7 @@ const ProfileHero = ({user}) => {
         </div>
 
         {/* Avatar spacing */}
-        <div className="mt-20 flex flex-col gap-2">
+        <div className="mt-8 flex flex-col gap-2">
           {/* Name */}
           <span className="text-[22px] font-bold text-white">{user.name}</span>
 
