@@ -28,7 +28,7 @@ const Profile = () => {
       </div>
       {showEditProfile && (
         <div className="fixed inset-0 z-50 bg-black/40 flex justify-center py-12">
-          <EditProfile user={user}/>
+          <EditProfile user={user} setShowEditProfile={setShowEditProfile}/>
         </div>
       )}
     </div>
