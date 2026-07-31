@@ -22,7 +22,7 @@ const QuoteCard = ({ post }) => {
   return (
     <div 
     onClick={handleOnClick}
-    className="w-full max-w-2xl cursor-pointer bg-black text-white   ">
+    className="w-full max-w-2xl cursor-pointer bg-transparent text-white   ">
       {/* Header */}
 
       <div className="flex gap-3 border rounded-xl  border-white/10 mt-10 p-2">
