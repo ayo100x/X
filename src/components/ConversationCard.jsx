@@ -6,7 +6,7 @@ const ConversationCard = ({conversation}) => {
   const setActiveConversationId = useConversationStore((state) => state.setActiveConversationId)
 
   const handleConversationClick = () => {
-    setActiveConversationId(conversation.userId)
+    setActiveConversationId(conversation?.userId)
   }
   return (
     <div 
@@ -15,7 +15,7 @@ const ConversationCard = ({conversation}) => {
       <div className="flex gap-3 px-4 mt-5 ">
         {/* Avatar */}
         <img
-          src={conversation.userAvatar}
+          src={conversation?.userAvatar}
           alt=""
           className="w-12 h-12 rounded-full object-cover shrink-0"
         />
@@ -24,14 +24,14 @@ const ConversationCard = ({conversation}) => {
         <div className="flex-1 min-w-0 pb-3 border-b border-white/10 ">
           {/* User Name and Time */}
           <div className="flex items-center justify-between">
-            <span className="text-[15px] font-semibold text-white">{conversation.name}</span>
+            <span className="text-[15px] font-semibold text-white">{conversation?.name}</span>
 
-            <span className="text-[13px] text-white/45">{formatRelativeTime(conversation.lastTextTime)}</span>
+            <span className="text-[13px] text-white/45">{formatRelativeTime(conversation?.lastTextTime)}</span>
           </div>
 
           {/* Last message */}
           <p className="mt-1 text-[15px] text-white/50 truncate">
-            {conversation.lastText}
+            {conversation?.lastText}
           </p>
         </div>
       </div>
