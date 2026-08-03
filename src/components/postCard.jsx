@@ -24,8 +24,7 @@ const PostCard = ({ post }) => {
   const [activePost, setActivePost] = useState({});
   const [showMoreActionButtons, setShowMoreActionButtons] = useState(false);
 
-  const user = usePostStore((state) => state.user);
-  const likePost = usePostStore((state) => state.likePost);
+  const { bookmarkPost, likePost, user } = usePostStore();
 
   const repostRef = useRef(null);
 
@@ -80,12 +79,16 @@ const PostCard = ({ post }) => {
   };
 
   const hasReposted = post.repost.includes(user.userId);
-  const hasLiked =  post.likes.includes(user.userId);
-  // const hasLiked = false
-  
+  const hasLiked = post.likes.includes(user.userId);
+  const hasBookmarked = post?.bookmarks?.includes(user.userId);
 
   const handleLikeOnClick = () => {
     likePost(post.postId);
+  };
+
+  const handleBookMarkOnClick = () => {
+    console.log("clicked")
+    bookmarkPost(post.postId);
   };
 
   const openCommentComposer = useCommentComposerStore(
@@ -312,12 +315,16 @@ const PostCard = ({ post }) => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  handleBookMarkOnClick();
                 }}
-                className="hover:text-white transition-colors"
+                className="size-8 flex items-center justify-center rounded-full hover:bg-blue-500/10 transition-colors"
               >
-                <Bookmark size={18} />
+                <Bookmark
+                  size={18}
+                  fill={hasBookmarked ? "currentColor" : "none"}
+                  className={hasBookmarked ? "text-blue-500" : "text-white/50"}
+                />
               </button>
-
               <button
                 onClick={(e) => {
                   e.stopPropagation();
