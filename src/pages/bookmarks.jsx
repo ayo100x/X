@@ -4,7 +4,8 @@ import { usePostStore } from "../stores/post.store";
 import PostCard from "../components/postCard";
 
 const Bookmarks = () => {
-  const { posts } = usePostStore();
+  const { posts, user } = usePostStore();
+
   return (
     <div className="h-full relative flex flex-col">
       <BookmarkHeader />
@@ -19,7 +20,10 @@ const Bookmarks = () => {
           />
         </div>
         {posts
-          .filter((post) => post.replyId === null)
+          .filter(
+            (post) =>
+              post.replyId === null && post.bookmarks.includes(user.userId),
+          )
           .map((post) => (
             <PostCard key={post.postId} post={post} />
           ))}
