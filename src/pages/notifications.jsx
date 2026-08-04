@@ -1,7 +1,10 @@
 import { Settings } from "lucide-react";
 import NotificationHeader from "../components/notificationHeader";
+import NotificationCard from "../components/notificationCard";
+import { useNotificationStore } from "../stores/useNotificationStore";
 
 const Notifications = () => {
+  const { notifications } = useNotificationStore();
   return (
     <div className="h-screen flex flex-col bg-black text-white border-r border-white/10">
       <div className="flex items-center justify-between px-5 py-4 bg-black">
@@ -17,6 +20,14 @@ const Notifications = () => {
         </button>
       </div>
       <NotificationHeader />
+      <div className="overflow-y-auto custom-scrollbar">
+        {notifications.map((notification) => (
+          <NotificationCard
+            key={notification.notificationId}
+            notification={notification}
+          />
+        ))}
+      </div>
     </div>
   );
 };
