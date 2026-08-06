@@ -79,7 +79,6 @@ function App() {
       </div>
 
       {!isChatPage && <FloatingButtons />}
-
       {showCommentComposer && activeReplyPost && (
         <div className="fixed inset-0 z-50 bg-black/40 flex justify-center py-12">
           <CommentComposer post={activeReplyPost} />
