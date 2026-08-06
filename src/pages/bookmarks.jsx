@@ -10,7 +10,7 @@ const Bookmarks = () => {
     <div className="h-full relative flex flex-col">
       <BookmarkHeader />
       {/* body */}
-      <div className="overflow-y-auto custom-scrollbar">
+      <div className="h-full overflow-y-auto custom-scrollbar">
         {/* searchbar */}
         <div className="flex gap-3 items-center shrink-0  h-10 m-4 rounded-full border border-white/10 text-sm text-white placeholder:text-white/40 focus-within:border-white/40  focus-within:ring-white/30 focus-within:ring-1 bg-black ">
           <Search className="size-4.5 text-white/40 ml-3" />

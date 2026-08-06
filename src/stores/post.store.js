@@ -16,6 +16,7 @@ export const usePostStore = create(
         likes: [1, 3, 5, 7],
         views: "1.2k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-05T09:12:00Z",
         user: {
           userId: 1,
@@ -36,6 +37,7 @@ export const usePostStore = create(
         likes: [1, 4],
         views: "2.8k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-05T11:30:00Z",
         user: {
           userId: 2,
@@ -55,6 +57,7 @@ export const usePostStore = create(
         likes: [1, 2, 4],
         views: "3.8k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-06T08:10:00Z",
         user: {
           userId: 3,
@@ -77,6 +80,7 @@ export const usePostStore = create(
         likes: [3, 6, 7],
         views: "4.1k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-06T12:44:00Z",
         user: {
           userId: 4,
@@ -96,6 +100,7 @@ export const usePostStore = create(
         likes: [2, 4, 6],
         views: "5.3k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-06T15:22:00Z",
         user: {
           userId: 5,
@@ -119,6 +124,7 @@ export const usePostStore = create(
         likes: [1, 5],
         views: "2.2k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-07T07:10:00Z",
         user: {
           userId: 6,
@@ -138,6 +144,7 @@ export const usePostStore = create(
         likes: [1, 2],
         views: "1.8k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-07T10:15:00Z",
         user: {
           userId: 7,
@@ -158,6 +165,7 @@ export const usePostStore = create(
         likes: [1, 3, 7],
         views: "6.4k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-07T13:09:00Z",
         user: {
           userId: 8,
@@ -177,6 +185,7 @@ export const usePostStore = create(
         likes: [2, 4],
         views: "8.1k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-07T16:20:00Z",
         user: {
           userId: 9,
@@ -201,6 +210,7 @@ export const usePostStore = create(
         likes: [1, 2, 3, 4, 5],
         views: "12.6k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-08T09:55:00Z",
         user: {
           userId: 10,
@@ -221,6 +231,7 @@ export const usePostStore = create(
         likes: [1, 4],
         views: "3.3k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-08T12:00:00Z",
         user: {
           userId: 11,
@@ -241,6 +252,7 @@ export const usePostStore = create(
         likes: [1, 2, 5],
         views: "4.8k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-08T15:22:00Z",
         user: {
           userId: 12,
@@ -262,6 +274,7 @@ export const usePostStore = create(
         likes: [3, 4],
         views: "2.1k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-08T18:30:00Z",
         user: {
           userId: 13,
@@ -286,6 +299,7 @@ export const usePostStore = create(
         likes: [1, 6],
         views: "7.9k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-09T08:11:00Z",
         user: {
           userId: 14,
@@ -306,6 +320,7 @@ export const usePostStore = create(
         likes: [2, 4, 5],
         views: "1.7k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-09T11:00:00Z",
         user: {
           userId: 15,
@@ -330,6 +345,7 @@ export const usePostStore = create(
         likes: [1, 2, 4],
         views: "9.4k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-09T14:45:00Z",
         user: {
           userId: 16,
@@ -350,6 +366,7 @@ export const usePostStore = create(
         likes: [1, 3],
         views: "2.6k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-09T17:33:00Z",
         user: {
           userId: 17,
@@ -370,6 +387,7 @@ export const usePostStore = create(
         likes: [2, 4, 6],
         views: "11.3k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-09T20:02:00Z",
         user: {
           userId: 18,
@@ -390,6 +408,7 @@ export const usePostStore = create(
         likes: [1, 2],
         views: "2.9k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-10T09:08:00Z",
         user: {
           userId: 19,
@@ -415,6 +434,7 @@ export const usePostStore = create(
         likes: [1, 2, 3, 5],
         views: "15.7k",
         comments: [],
+        bookmarks: [],
         createdAt: "2026-06-10T13:50:00Z",
         user: {
           userId: 20,
@@ -528,6 +548,26 @@ export const usePostStore = create(
         return {
           ...post,
           likes: [...post.likes, user.userId],
+        };
+      });
+
+      set({ posts: updatedPosts });
+    },
+
+    bookmarkPost: (postId) => {
+      const { user, posts } = get();
+      const updatedPosts = posts.map((post) => {
+        if (post.postId !== postId) return post;
+        const hasBookmarked = post.bookmarks.includes(user.userId);
+        if (hasBookmarked) {
+          return {
+            ...post,
+            bookmarks: post.bookmarks.filter((id) => id !== user.userId),
+          };
+        }
+        return {
+          ...post,
+          bookmarks: [...post.bookmarks, user.userId],
         };
       });
 

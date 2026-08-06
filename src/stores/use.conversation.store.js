@@ -245,6 +245,7 @@ export const useConversationStore = create(
             return {
               ...conversation,
               messages: [...conversation.messages, newMessage],
+          
             };
           }),
         });

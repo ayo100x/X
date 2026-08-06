@@ -35,7 +35,7 @@ const NewsCard = () => {
         {news.map((item, i) => (
           <div
             key={i}
-            className="px-4 py-3 space-y-2 hover:bg-white/[0.03] transition"
+            className="px-4 py-3 space-y-2 hover:bg-white/3 transition"
           >
             
             {/* Headline */}
